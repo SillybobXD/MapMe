@@ -29,6 +29,8 @@ android {
 }
 
 dependencies {
+
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -39,7 +41,10 @@ dependencies {
 
     compile('com.mikepenz:materialdrawer:5.9.5@aar') {
         transitive = true
+
     }
+
+
 }
 
 dependencies {
@@ -47,5 +52,22 @@ dependencies {
     compile 'com.daimajia.easing:library:2.0@aar'
     compile 'com.daimajia.androidanimations:library:2.3@aar'
 }
+
+dependencies {
+
+    "com.mikepenz:iconics-core:3.0.0@aar"
+    "com.android.support:appcompat-v7"
+    'com.mikepenz:google-material-typeface:3.0.1.2.original@aar'
+
+    "com.mikepenz:iconics-views:3.0.0@aar"
+
+
+}
+
+
+
+
+
+
 
 

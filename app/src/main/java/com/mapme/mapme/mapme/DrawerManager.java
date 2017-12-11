@@ -3,6 +3,8 @@ package com.mapme.mapme.mapme;
 import android.app.Activity;
 import android.view.View;
 
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
@@ -15,17 +17,24 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 public class DrawerManager {
 
-    public static void makeDrawer(final Activity activity) {
 
+    public static void makeDrawer(final Activity activity) {
         new DrawerBuilder().withActivity(activity).build();
 
-        PrimaryDrawerItem map = new PrimaryDrawerItem().withIdentifier(1).withName("Map");
-        SecondaryDrawerItem favorites = new SecondaryDrawerItem().withIdentifier(2).withName("Favorites");
-        SecondaryDrawerItem settings = new SecondaryDrawerItem().withIdentifier(2).withName("Settings");
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(activity)
+                .withHeaderBackground(R.mipmap.logo)
+                .build();
+
+        PrimaryDrawerItem map = new PrimaryDrawerItem().withIdentifier(1).withName(R.string.map);
+        SecondaryDrawerItem favorites = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.favorites);
+        SecondaryDrawerItem settings = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.setting);
 
         Drawer result = new DrawerBuilder()
+                .withTranslucentStatusBar(true)
+                .withAccountHeader(headerResult)
                 .withActivity(activity)
-                //.withToolbar(toolbar)
+
                 .addDrawerItems(map, favorites, settings)
 
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -50,9 +59,12 @@ public class DrawerManager {
                         return false;
                     }
                 })
+
                 .build();
 
+
     }
+
 }
 
 
