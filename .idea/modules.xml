@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/MapApp.iml" filepath="$PROJECT_DIR$/MapApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/MapMe.iml" filepath="$PROJECT_DIR$/MapMe.iml" />
       <module fileurl="file://$PROJECT_DIR$/MapMe2.iml" filepath="$PROJECT_DIR$/MapMe2.iml" />
       <module fileurl="file://$PROJECT_DIR$/MapMennnn.iml" filepath="$PROJECT_DIR$/MapMennnn.iml" />

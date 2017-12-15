@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">MapMe</string>
+    <string name="app_name">MikUmi</string>
+    <string name="map">Map</string>
+    <string name="setting">Setting</string>
+    <string name="favorites">Favorites</string>
+
+
 </resources>
