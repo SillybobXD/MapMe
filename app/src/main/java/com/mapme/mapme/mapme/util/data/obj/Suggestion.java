@@ -1,35 +1,31 @@
-package com.mapme.mapme.mapme.util;
+package com.mapme.mapme.mapme.util.data.obj;
+
+import java.io.Serializable;
 
 /**
  * Created by Sillybob on 12/13/2017.
  */
 
-public class Suggestion {
+public class Suggestion implements Serializable {
+    //place_id
     private String id;
+    //main_text
     private String mainText;
+    //secondary_text
     private String secondaryText;
-
-    public Suggestion(String description) {
-        int nameIndex = description.indexOf(',');
-        if (nameIndex != -1) {
-            mainText = description.substring(0, nameIndex);
-            secondaryText = description.substring(nameIndex + 2);
-        } else {
-            mainText = description;
-            secondaryText = "";
-        }
-
-    }
-
-    public Suggestion(String mainText, String seconderyText) {
-        this.mainText = mainText;
-        this.secondaryText = seconderyText;
-    }
 
     public Suggestion(String id, String mainText, String seconderyText) {
         this.id = id;
         this.mainText = mainText;
         this.secondaryText = seconderyText;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getMainText() {

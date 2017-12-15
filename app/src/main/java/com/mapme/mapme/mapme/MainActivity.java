@@ -2,6 +2,7 @@ package com.mapme.mapme.mapme;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -12,6 +13,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -19,7 +22,8 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.mapme.mapme.mapme.util.CustomSuggestionAdapter;
 import com.mapme.mapme.mapme.util.GoogleAPIManager;
-import com.mapme.mapme.mapme.util.Suggestion;
+import com.mapme.mapme.mapme.util.data.obj.Place;
+import com.mapme.mapme.mapme.util.data.obj.Suggestion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +34,12 @@ public class MainActivity extends AppCompatActivity {
     private static final int PREMISSION_CODE = 20;
     LocationManager locationManager;
     LocationListener locationListener;
-    Location currLocation;
+    Location currLocation = new Location("");
     MaterialSearchBar searchBar;
     CustomSuggestionAdapter suggestionAdapter;
     List<Suggestion> suggestions;
+    TextView textView;
+    ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +53,17 @@ public class MainActivity extends AppCompatActivity {
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
+        currLocation.setLatitude(32.477221);
+        currLocation.setLongitude(34.962719);
+        GoogleAPIManager.setLocation(currLocation);
+
         locationListener = new LocationListener() {
 
             @Override
             public void onLocationChanged(Location location) {
                 currLocation = location;
                 Log.d(TAG, "onLocationChanged: " + location.toString());
-                GoogleAPIManager.setLocation(location);
+                GoogleAPIManager.setLocation(currLocation);
             }
 
             @Override
@@ -72,9 +82,11 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000 * 30, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000 * 1, 0, locationListener);
 
         searchBar = findViewById(R.id.searchBar);
+        textView = findViewById(R.id.textView);
+        imageView = findViewById(R.id.imageView2);
         searchBar.setRoundedSearchBarEnabled(true);
 
         suggestionAdapter = new CustomSuggestionAdapter(getLayoutInflater());
@@ -100,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(VolleyError error) {
-
+                        Log.d(TAG, "onFailure: " + error.toString());
                     }
                 });
             }
@@ -111,10 +123,64 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+            @Override
+            public void onSearchStateChanged(boolean enabled) {
+
+            }
+
+            @Override
+            public void onSearchConfirmed(final CharSequence text) {
+                GoogleAPIManager.getPlacesByText(text.toString(), new GoogleAPIManager.IGetPlacesTextResponse() {
+                    @Override
+                    public void onResponse(ArrayList<Place> places) {
+                        Log.d(TAG, "onResponse: " + places);
+                        for (Place place : places) {
+                            textView.setText(textView.getText() + "\n" + place.getPlaceName());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(VolleyError error) {
+                        Log.d(TAG, "onFailure: " + error.toString());
+                    }
+                });
+            }
+
+            @Override
+            public void onButtonClicked(int buttonCode) {
+
+            }
+        });
+
         suggestionAdapter.setListener(new SuggestionsAdapter.OnItemViewClickListener() {
             @Override
             public void OnItemClickListener(int position, View v) {
                 Toast.makeText(MainActivity.this, "Item Clicked: " + position, Toast.LENGTH_SHORT).show();
+                GoogleAPIManager.getPlace(((Suggestion) searchBar.getLastSuggestions().get(position)).getId(), new GoogleAPIManager.IGetPlaceResponse() {
+                    @Override
+                    public void onResponse(Place place) {
+                        Log.d(TAG, "onResponse: " + place.toString());
+                        textView.setText(place.toString());
+                        if (place.getPhotos() != null)
+                            GoogleAPIManager.getPlacePhoto(place.getPhotos().get(0).getReference(), 600, new GoogleAPIManager.IGetPhotoResponse() {
+                                @Override
+                                public void onResponse(Bitmap photo) {
+                                    imageView.setImageBitmap(photo);
+                                }
+
+                                @Override
+                                public void onFailuer(VolleyError error) {
+
+                                }
+                            });
+                    }
+
+                    @Override
+                    public void onFailure(VolleyError error) {
+                        Log.d(TAG, "onFailure: " + error.toString());
+                    }
+                });
             }
 
             @Override
@@ -123,28 +189,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-/*
-        queue = Volley.newRequestQueue(this);
-        String url ="https://maps.googleapis.com/maps/api/place/autocomplete/json?input=Pizza&types=establishment&location=37.76999,-122.44696&radius=500&key=AIzaSyDhHcrTpAfUIwo_R3XdL3L7x2vniELnXxE";
-
-// Request a string response from the provided URL.
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(url, new JSONObject(), new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                Log.d(TAG, response.toString());
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if (error != null)
-                    Log.d(TAG, "ERROR: " + error.toString());
-                else
-                    Log.d(TAG, "ERROR: null");
-            }
-        });
-// Add the request to the RequestQueue.
-        queue.add(jsonObjectRequest);*/
 
     }
 

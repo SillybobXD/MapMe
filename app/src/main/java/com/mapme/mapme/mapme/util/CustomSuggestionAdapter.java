@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.mapme.mapme.mapme.R;
+import com.mapme.mapme.mapme.util.data.obj.Suggestion;
 
 /**
  * Created by Sillybob on 12/13/2017.
@@ -15,6 +16,7 @@ import com.mapme.mapme.mapme.R;
 
 public class CustomSuggestionAdapter extends SuggestionsAdapter<Suggestion, CustomSuggestionAdapter.SuggestionHolder> {
 
+    //View click listener
     private SuggestionsAdapter.OnItemViewClickListener listener;
 
     public CustomSuggestionAdapter(LayoutInflater layoutInflater) {
