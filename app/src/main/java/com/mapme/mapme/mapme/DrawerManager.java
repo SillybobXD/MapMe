@@ -1,8 +1,11 @@
 package com.mapme.mapme.mapme;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.View;
 
+import com.mapme.mapme.mapme.util.FavoritesActivity;
+import com.mapme.mapme.mapme.util.SettingsActivity;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -28,12 +31,13 @@ public class DrawerManager {
 
         PrimaryDrawerItem map = new PrimaryDrawerItem().withIdentifier(1).withName(R.string.map);
         SecondaryDrawerItem favorites = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.favorites);
-        SecondaryDrawerItem settings = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.setting);
+        SecondaryDrawerItem settings = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.settings);
 
         Drawer result = new DrawerBuilder()
                 .withTranslucentStatusBar(true)
                 .withAccountHeader(headerResult)
                 .withActivity(activity)
+
 
                 .addDrawerItems(map, favorites, settings)
 
@@ -42,28 +46,31 @@ public class DrawerManager {
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         switch (position) {
                             case 0:
-
+                                Intent mapIntent = new Intent(activity.getBaseContext(), MainActivity.class);
+                                activity.startActivity(mapIntent);
                                 break;
-
                             case 2:
-
+                                Intent favoritesIntent = new Intent(activity.getBaseContext(), FavoritesActivity.class);
+                                activity.startActivity(favoritesIntent);
                                 break;
-
                             case 3:
-
+                                Intent settingsIntent = new Intent(activity.getBaseContext(), SettingsActivity.class);
+                                activity.startActivity(settingsIntent);
                                 break;
 
 
                         }
 
-                        return false;
+                        return true;
                     }
                 })
-
                 .build();
+
+        result.openDrawer();
 
 
     }
+
 
 }
 
