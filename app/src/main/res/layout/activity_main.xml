@@ -13,8 +13,8 @@
         android:id="@+id/btn_menu_mainActivity"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/ic_menu_animated"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -46,18 +46,19 @@
 
     <com.mancj.materialsearchbar.MaterialSearchBar
         android:id="@+id/searchBar"
-        style="@style/MaterialSearchBarLight"
+        style="@style/MaterialSearchBarDark"
         android:layout_width="303dp"
         android:layout_height="41dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="3dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintHorizontal_bias="0.814"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="16dp"
+        app:layout_constraintHorizontal_bias="0.277"
+        app:layout_constraintLeft_toRightOf="@+id/btn_menu_mainActivity"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+
         app:mt_hint="Custom hint"
         app:mt_maxSuggestionsCount="10"
         app:mt_speechMode="true" />

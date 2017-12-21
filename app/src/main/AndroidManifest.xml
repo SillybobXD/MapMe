@@ -18,7 +18,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDhHcrTpAfUIwo_R3XdL3L7x2vniELnXxE" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,7 +26,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".util.SettingsActivity" />
-        <activity android:name=".util.FavoritesActivity"></activity>
+        <activity android:name=".util.FavoritesActivity" />
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>

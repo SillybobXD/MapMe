@@ -192,12 +192,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        DrawerManager.makeDrawer(MainActivity.this);
+
         Button btn_openDrawer = findViewById(R.id.btn_menu_mainActivity);
         btn_openDrawer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                DrawerManager.makeDrawer(MainActivity.this);
+                DrawerManager.openDrawer();
+
 
             }
         });

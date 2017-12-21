@@ -20,20 +20,21 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 
 public class DrawerManager {
 
+    static Drawer drawer;
 
     public static void makeDrawer(final Activity activity) {
         new DrawerBuilder().withActivity(activity).build();
 
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(activity)
-                .withHeaderBackground(R.mipmap.logo)
+                .withHeaderBackground(R.drawable.logo_green)
                 .build();
 
         PrimaryDrawerItem map = new PrimaryDrawerItem().withIdentifier(1).withName(R.string.map);
         SecondaryDrawerItem favorites = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.favorites);
         SecondaryDrawerItem settings = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.settings);
 
-        Drawer result = new DrawerBuilder()
+        drawer = new DrawerBuilder()
                 .withTranslucentStatusBar(true)
                 .withAccountHeader(headerResult)
                 .withActivity(activity)
@@ -49,11 +50,11 @@ public class DrawerManager {
                                 Intent mapIntent = new Intent(activity.getBaseContext(), MainActivity.class);
                                 activity.startActivity(mapIntent);
                                 break;
-                            case 2:
+                            case 1:
                                 Intent favoritesIntent = new Intent(activity.getBaseContext(), FavoritesActivity.class);
                                 activity.startActivity(favoritesIntent);
                                 break;
-                            case 3:
+                            case 2:
                                 Intent settingsIntent = new Intent(activity.getBaseContext(), SettingsActivity.class);
                                 activity.startActivity(settingsIntent);
                                 break;
@@ -66,8 +67,12 @@ public class DrawerManager {
                 })
                 .build();
 
-        result.openDrawer();
 
+    }
+
+    public static void openDrawer() {
+
+        drawer.openDrawer();
 
     }
 

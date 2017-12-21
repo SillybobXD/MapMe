@@ -16,26 +16,37 @@ import android.widget.TextView;
 import com.mapme.mapme.mapme.DrawerManager;
 import com.mapme.mapme.mapme.R;
 
+import java.util.ArrayList;
+
 public class FavoritesActivity extends AppCompatActivity {
+
+    public static ArrayList<Integer> favoritesItems;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
 
+        favoritesItems = new ArrayList<Integer>();
+
+        DrawerManager.makeDrawer(FavoritesActivity.this);
+
         Button btn_drawer = findViewById(R.id.btn_menu_favorites);
         btn_drawer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DrawerManager.makeDrawer(FavoritesActivity.this);
+
+                DrawerManager.openDrawer();
+
             }
         });
 
 
         ListView listView = findViewById(R.id.lv_favorites);
 
-        ArrayAdapter adapter = new ArrayAdapter<Integer>(FavoritesActivity.this, R.layout.item_favoties_cv) {
-
+        ArrayAdapter adapter = new ArrayAdapter<Integer>(FavoritesActivity.this, R.layout.item_favoties_cv, favoritesItems) {
             @NonNull
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -44,20 +55,27 @@ public class FavoritesActivity extends AppCompatActivity {
                     convertView = LayoutInflater.from(FavoritesActivity.this).inflate(R.layout.item_favoties_cv, null);
                 }
 
+                int itemsIndex = getItem(position);
+                Integer favoritesPlace = favoritesItems.get(itemsIndex);
+
                 TextView tv_title = convertView.findViewById(R.id.tv_placeName_itemFavorites);
                 TextView tv_details = convertView.findViewById(R.id.tv_details_itemFavorites);
-                Button btn_delete = convertView.findViewById(R.id.btn_delete_itemFavorites);
                 ImageView iv_place = convertView.findViewById(R.id.iv_itemFavorites);
+
+                Button btn_delete = convertView.findViewById(R.id.btn_delete_itemFavorites);
+
+
+
 
 
                 return convertView;
             }
         };
 
-
         listView.setAdapter(adapter);
 
 
     }
+
 
 }
