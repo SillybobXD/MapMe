@@ -29,8 +29,6 @@ public class FavoritesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
 
-        favoritesItems = new ArrayList<Integer>();
-
         DrawerManager.makeDrawer(FavoritesActivity.this);
 
         Button btn_drawer = findViewById(R.id.btn_menu_favorites);
@@ -44,6 +42,13 @@ public class FavoritesActivity extends AppCompatActivity {
         });
 
 
+        favoritesItems = new ArrayList<Integer>();
+
+        favoritesItems.add(1);
+        favoritesItems.add(1);
+        favoritesItems.add(1);
+        favoritesItems.add(1);
+
         ListView listView = findViewById(R.id.lv_favorites);
 
         ArrayAdapter adapter = new ArrayAdapter<Integer>(FavoritesActivity.this, R.layout.item_favoties_cv, favoritesItems) {
@@ -51,11 +56,12 @@ public class FavoritesActivity extends AppCompatActivity {
             @Override
             public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-                if (convertView == null) {
+                // if (convertView == null) {
                     convertView = LayoutInflater.from(FavoritesActivity.this).inflate(R.layout.item_favoties_cv, null);
-                }
+                // }
 
-                int itemsIndex = getItem(position);
+                final int itemsIndex = getItem(position);
+
                 Integer favoritesPlace = favoritesItems.get(itemsIndex);
 
                 TextView tv_title = convertView.findViewById(R.id.tv_placeName_itemFavorites);
@@ -64,8 +70,13 @@ public class FavoritesActivity extends AppCompatActivity {
 
                 Button btn_delete = convertView.findViewById(R.id.btn_delete_itemFavorites);
 
+                btn_delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
 
+                    }
+                });
 
 
                 return convertView;

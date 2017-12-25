@@ -10,6 +10,7 @@ import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
@@ -30,31 +31,33 @@ public class DrawerManager {
                 .withHeaderBackground(R.drawable.logo_green)
                 .build();
 
-        PrimaryDrawerItem map = new PrimaryDrawerItem().withIdentifier(1).withName(R.string.map);
-        SecondaryDrawerItem favorites = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.favorites);
-        SecondaryDrawerItem settings = new SecondaryDrawerItem().withIdentifier(2).withName(R.string.settings);
+        PrimaryDrawerItem map = new PrimaryDrawerItem().withName(R.string.map);
+        SecondaryDrawerItem favorites = new SecondaryDrawerItem().withName(R.string.favorites);
+        SecondaryDrawerItem settings = new SecondaryDrawerItem().withName(R.string.settings);
 
         drawer = new DrawerBuilder()
-                .withTranslucentStatusBar(true)
+
                 .withAccountHeader(headerResult)
                 .withActivity(activity)
 
 
-                .addDrawerItems(map, favorites, settings)
+                .addDrawerItems(map,
+                        new DividerDrawerItem(),
+                        favorites, settings)
 
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         switch (position) {
-                            case 0:
+                            case 1:
                                 Intent mapIntent = new Intent(activity.getBaseContext(), MainActivity.class);
                                 activity.startActivity(mapIntent);
                                 break;
-                            case 1:
+                            case 3:
                                 Intent favoritesIntent = new Intent(activity.getBaseContext(), FavoritesActivity.class);
                                 activity.startActivity(favoritesIntent);
                                 break;
-                            case 2:
+                            case 4:
                                 Intent settingsIntent = new Intent(activity.getBaseContext(), SettingsActivity.class);
                                 activity.startActivity(settingsIntent);
                                 break;
@@ -62,7 +65,7 @@ public class DrawerManager {
 
                         }
 
-                        return true;
+                        return false;
                     }
                 })
                 .build();

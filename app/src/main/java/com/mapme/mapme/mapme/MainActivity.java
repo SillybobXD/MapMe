@@ -92,6 +92,10 @@ public class MainActivity extends AppCompatActivity {
         imageView = findViewById(R.id.imageView2);
         searchBar.setRoundedSearchBarEnabled(true);
 
+        ArrayList<Suggestion> arrayList = new ArrayList<Suggestion>();
+        arrayList.add(new Suggestion("1", "Main", "Sub"));
+        searchBar.setLastSuggestions(arrayList);
+
         suggestionAdapter = new CustomSuggestionAdapter(getLayoutInflater());
         suggestions = new ArrayList<>();
         searchBar.setCustomSuggestionAdapter(suggestionAdapter);

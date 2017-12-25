@@ -16,9 +16,9 @@ public class SplashScreen extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
 
         ImageView logo = findViewById(R.id.iv_logo_splash);
-        ImageView location = findViewById(R.id.iv_location_splash);
+        final ImageView location = findViewById(R.id.iv_location_splash);
 
-        YoYo.with(Techniques.BounceInRight).duration(3000).playOn(logo);
+        YoYo.with(Techniques.BounceInRight).duration(2800).playOn(logo);
         YoYo.with(Techniques.Hinge).duration(2000).delay(1000).playOn(location);
 
         Thread mThread = new Thread() {
@@ -28,7 +28,7 @@ public class SplashScreen extends AppCompatActivity {
                 super.run();
                 {
                     try {
-                        sleep(3000);
+                        sleep(2800);
                         Intent intent = new Intent(SplashScreen.this, MainActivity.class);
                         startActivity(intent);
                         finish();
