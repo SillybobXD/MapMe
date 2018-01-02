@@ -13,6 +13,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -89,6 +90,10 @@ public class MainActivity extends AppCompatActivity {
         textView = findViewById(R.id.textView);
         imageView = findViewById(R.id.imageView2);
         searchBar.setRoundedSearchBarEnabled(true);
+
+        ArrayList<Suggestion> arrayList = new ArrayList<Suggestion>();
+        arrayList.add(new Suggestion("1", "Main", "Sub"));
+        searchBar.setLastSuggestions(arrayList);
 
         suggestionAdapter = new CustomSuggestionAdapter(getLayoutInflater());
         suggestions = new ArrayList<>();
@@ -190,7 +195,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        DrawerManager.makeDrawer(this);
+
+        DrawerManager.makeDrawer(MainActivity.this);
+
+        Button btn_openDrawer = findViewById(R.id.btn_menu_mainActivity);
+        btn_openDrawer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                DrawerManager.openDrawer();
+
+
+            }
+        });
+
 
     }
 
