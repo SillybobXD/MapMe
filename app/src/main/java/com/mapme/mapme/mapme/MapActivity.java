@@ -49,6 +49,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        DrawerManager.makeDrawer(this);
+
+
         GoogleAPIManager.init(this);
         Location currLocation = new Location("");
         currLocation.setLatitude(32.477221);
@@ -57,9 +60,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         mParentLayout = (ConstraintLayout) findViewById(R.id.mapActivity_cl_parent);
         mLoacionSearchBar = (MaterialSearchBar) findViewById(R.id.mapActivity_sb_location);
-        mPlaceSearchBar = (MaterialSearchBar) findViewById(R.id.mapActivity_sb_gps);
         mGPS = (FloatingActionButton) findViewById(R.id.mapActivity_fab_gps);
-        mPlaceSearch = (FloatingActionButton) findViewById(R.id.mapActivity_fab_search);
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapActivity_frag_googleMapFrag);
 
@@ -220,9 +221,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 break;
             case (R.id.mapActivity_fab_gps):
                 break;
-            case (R.id.mapActivity_fab_search):
-                focusPlaceSearchBar();
-                break;
+
             case (R.id.mapActivity_frag_googleMapFrag):
                 focusMap();
                 break;

@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MikumiApp.iml" filepath="$PROJECT_DIR$/MikumiApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mikumibeta.iml" filepath="$PROJECT_DIR$/mikumibeta.iml" />
     </modules>
   </component>
 </project>
