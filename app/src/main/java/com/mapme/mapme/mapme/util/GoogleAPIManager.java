@@ -61,12 +61,12 @@ public class GoogleAPIManager {
         sb.append(PLACES_API_BASE)
                 .append(TYPE_AUTOCOMPLETE)
                 .append(OUT_JSON)
-                .append("input=" + formattedInput)
-                .append("&type=establishment");
+                .append("input=" + formattedInput);
+        //.append("&type=establishment");
         if (location != null)
             sb.append("&location=" + location.getLatitude() + "," + location.getLongitude())
-                    .append("&radius=" + radius)
-                    .append("&strictbounds");
+                    .append("&radius=" + radius);
+        //.append("&strictbounds");
         sb.append("&key=" + API_KEY);
 
         JsonObjectRequest request = new JsonObjectRequest(sb.toString(), new JSONObject(), new Response.Listener<JSONObject>() {
@@ -102,6 +102,53 @@ public class GoogleAPIManager {
 
         requestQueue.addToRequestQueue(request);
 
+    }
+
+    public static void autoCompleteAddress(String input, final IAutoCompleteResponse autoCompleteResponse) {
+        String formattedInput = formatString(input);
+        StringBuilder sb = new StringBuilder();
+        sb.append(PLACES_API_BASE)
+                .append(TYPE_TEXT)
+                .append(OUT_JSON)
+                .append("input=" + formattedInput)
+                .append("&type=geocode");
+        /*if (location != null)
+            sb.append("&location=" + location.getLatitude() + "," + location.getLongitude())
+                    .append("&radius=" + radius)
+                    .append("&strictbounds");*/
+        sb.append("&key=" + API_KEY);
+
+        JsonObjectRequest request = new JsonObjectRequest(sb.toString(), new JSONObject(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    // Create a JSON object hierarchy from the results
+                    JSONArray predsJsonArray = response.getJSONArray("predictions");
+                    ArrayList<Suggestion> resultList;
+                    resultList = new ArrayList<Suggestion>(predsJsonArray.length());
+                    for (int i = 0; i < predsJsonArray.length(); i++) {
+                        JSONObject structuredFormatting = predsJsonArray.getJSONObject(i).getJSONObject("structured_formatting");
+                        String mainText = structuredFormatting.getString("main_text");
+                        String secondaryText = "";
+                        if (structuredFormatting.has("secondary_text"))
+                            secondaryText = structuredFormatting.getString("secondary_text");
+                        String id = predsJsonArray.getJSONObject(i).getString("place_id");
+                        resultList.add(new Suggestion(id, mainText, secondaryText));
+                    }
+                    autoCompleteResponse.onResponse(resultList);
+                } catch (JSONException e) {
+                    Log.e(TAG, "Cannot process JSON results", e);
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                autoCompleteResponse.onFailure(error);
+            }
+        });
+
+        requestQueue.addToRequestQueue(request);
     }
 
     public static void getPlace(String id, final IGetPlaceResponse getPlaceResponse) {
@@ -197,6 +244,63 @@ public class GoogleAPIManager {
         requestQueue.addToRequestQueue(request);
     }
 
+    public static void getLocationByText(String query, final IGetLocationResponse getLocationResponse) {
+        /*StringBuilder sb = new StringBuilder();
+        String formattedQuery = formatString(query);
+        sb.append(PLACES_API_BASE)
+                .append(TYPE_TEXT)
+                .append(OUT_JSON)
+                .append("query=" + formattedQuery)
+        if (location != null)
+            sb.append("&location=" + location.getLatitude() + "," + location.getLongitude())
+                    .append("&radius=" + radius);
+                .append("&key=" + API_KEY);*/
+        getPlacesByText(query, new IGetPlacesTextResponse() {
+            @Override
+            public void onResponse(ArrayList<Place> places) {
+                if (places != null && !places.isEmpty())
+                    getLocationResponse.onResponse(places.get(0).getLocation());
+            }
+
+            @Override
+            public void onFailure(VolleyError error) {
+                getLocationResponse.onFailure(error);
+            }
+        });
+    }
+
+    public static void getLocation(String id, final IGetLocationResponse getLocationResponse) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(PLACES_API_BASE)
+                .append(TYPE_DETAILS)
+                .append(OUT_JSON)
+                .append("placeid=" + id)
+                .append("&key=" + API_KEY);
+        JsonObjectRequest request = new JsonObjectRequest(sb.toString(), new JSONObject(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONObject resault = response.getJSONObject("result");
+                    JSONObject jsonLocation = resault.getJSONObject("geometry").getJSONObject("location");
+                    Location location = new Location("");
+                    location.setLatitude(jsonLocation.getDouble("lat"));
+                    location.setLongitude(jsonLocation.getDouble("lng"));
+                    getLocationResponse.onResponse(location);
+                } catch (JSONException e) {
+
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                getLocationResponse.onFailure(error);
+
+            }
+        });
+
+        requestQueue.addToRequestQueue(request);
+    }
+
     public static void setLocation(Location location) {
         GoogleAPIManager.location = location;
     }
@@ -261,18 +365,22 @@ public class GoogleAPIManager {
 
     public interface IGetPlaceResponse {
         void onResponse(Place place);
-
         void onFailure(VolleyError error);
     }
 
     public interface IGetPhotoResponse {
         void onResponse(Bitmap photo);
-
         void onFailuer(VolleyError error);
     }
 
     public interface IGetPlacesTextResponse {
         void onResponse(ArrayList<Place> places);
+
+        void onFailure(VolleyError error);
+    }
+
+    public interface IGetLocationResponse {
+        void onResponse(Location location);
         void onFailure(VolleyError error);
     }
 }

@@ -46,9 +46,6 @@ public class Suggestion implements Serializable {
 
     @Override
     public String toString() {
-        return "Suggestion{" +
-                "mainText='" + mainText + '\'' +
-                ", secondaryText='" + secondaryText + '\'' +
-                '}';
+        return mainText + " " + secondaryText;
     }
 }

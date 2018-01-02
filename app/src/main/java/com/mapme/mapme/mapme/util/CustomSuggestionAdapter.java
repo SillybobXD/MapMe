@@ -31,7 +31,7 @@ public class CustomSuggestionAdapter extends SuggestionsAdapter<Suggestion, Cust
 
     @Override
     public int getSingleViewHeight() {
-        return 60;
+        return 65;
     }
 
     @Override

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mapActivity_cl_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.mapme.mapme.mapme.MapActivity">
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/mapActivity_frag_googleMapFrag"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintHorizontal_bias="0.0"
+        map:layout_constraintLeft_toLeftOf="parent"
+        map:layout_constraintRight_toRightOf="parent"
+        map:layout_constraintTop_toTopOf="parent"
+        map:layout_constraintVertical_bias="0.0"
+        tools:context="com.mapme.mapme.mapapplication.MapsActivity" />
+
+    <com.mancj.materialsearchbar.MaterialSearchBar
+        android:id="@+id/mapActivity_sb_location"
+        style="@style/MaterialSearchBarLight"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:tooltipText="Search Loaction"
+        app:layout_constraintLeft_toRightOf="@+id/mapActivity_iv_menu"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:mt_hint="Enter location"
+        app:mt_maxSuggestionsCount="10"
+        app:mt_placeholder="Search Loaction"
+        app:mt_placeholderColor="@color/common_google_signin_btn_text_dark_disabled"
+        app:mt_roundedSearchBarEnabled="true"
+        app:mt_speechMode="true" />
+
+    <ImageView
+        android:id="@+id/mapActivity_iv_menu"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/mapActivity_sb_location"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/mapActivity_sb_location"
+        app:srcCompat="@drawable/ic_menu_black_24dp" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/mapActivity_fab_gps"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="64dp"
+        android:layout_marginRight="16dp"
+        android:clickable="true"
+        app:backgroundTint="@color/accent"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_mylocation" />
+
+</android.support.constraint.ConstraintLayout>

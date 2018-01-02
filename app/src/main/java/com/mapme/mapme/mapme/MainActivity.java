@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         GoogleAPIManager.init(getApplicationContext());
@@ -86,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000 * 1, 0, locationListener);
 
-        searchBar = findViewById(R.id.searchBar);
+        searchBar = findViewById(R.id.mapActivity_sb_location);
         textView = findViewById(R.id.textView);
         imageView = findViewById(R.id.imageView2);
         searchBar.setRoundedSearchBarEnabled(true);
