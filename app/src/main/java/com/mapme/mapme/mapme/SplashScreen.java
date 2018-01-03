@@ -17,9 +17,11 @@ public class SplashScreen extends AppCompatActivity {
 
         ImageView logo = findViewById(R.id.iv_logo_splash);
         final ImageView location = findViewById(R.id.iv_location_splash);
+        final ImageView flag = findViewById(R.id.iv_flag_splash);
 
         YoYo.with(Techniques.BounceInRight).duration(2800).playOn(logo);
-        YoYo.with(Techniques.Hinge).duration(2000).delay(1000).playOn(location);
+        YoYo.with(Techniques.FadeOutUp).duration(2000).delay(1000).playOn(location);
+        YoYo.with(Techniques.FadeInLeft).duration(1700).delay(1000).playOn(flag);
 
         Thread mThread = new Thread() {
 

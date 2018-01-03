@@ -3,6 +3,7 @@
     <color name="colorPrimary">#939393</color>
     <color name="colorPrimaryDark">#414141</color>
     <color name="colorAccent">#87be83</color>
+    <color name="yellow">#e4d943</color>
 
 
     <!-- MaterialDrawer DEFAULT DARK colors -->

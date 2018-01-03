@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.android.volley.VolleyError;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -52,6 +54,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         DrawerManager.makeDrawer(this);
 
 
+
         GoogleAPIManager.init(this);
         Location currLocation = new Location("");
         currLocation.setLatitude(32.477221);
@@ -63,6 +66,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mGPS = (FloatingActionButton) findViewById(R.id.mapActivity_fab_gps);
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.mapActivity_frag_googleMapFrag);
+
+        YoYo.with(Techniques.StandUp).playOn(mLoacionSearchBar);
+        YoYo.with(Techniques.Tada).duration(3500).playOn(mGPS);
+
 
         final MaterialSearchBar.OnSearchActionListener actionListener = new MaterialSearchBar.OnSearchActionListener() {
             @Override
@@ -92,6 +99,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
             @Override
             public void onButtonClicked(int buttonCode) {
+
+                switch (buttonCode) {
+                    case MaterialSearchBar.BUTTON_NAVIGATION:
+                        DrawerManager.openDrawer();
+                        break;
+                    case MaterialSearchBar.BUTTON_BACK:
+                        mLoacionSearchBar.disableSearch();
+                        break;
+                }
 
             }
         };
@@ -228,9 +244,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
+
     private enum State {
         MapFocus,
         LocationSeachbarFocus,
         PlaceSearchbarFocus
     }
+
+
 }
