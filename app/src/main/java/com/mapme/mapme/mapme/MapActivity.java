@@ -28,6 +28,7 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.mapme.mapme.mapme.util.CustomSuggestionAdapter;
 import com.mapme.mapme.mapme.util.GoogleAPIManager;
+import com.mapme.mapme.mapme.util.SharedPreferencesManager;
 import com.mapme.mapme.mapme.util.data.obj.Suggestion;
 
 import java.util.ArrayList;
@@ -52,10 +53,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_map);
 
         DrawerManager.makeDrawer(this);
-
-
-
         GoogleAPIManager.init(this);
+        SharedPreferencesManager.init(this);
+
         Location currLocation = new Location("");
         currLocation.setLatitude(32.477221);
         currLocation.setLongitude(34.962719);

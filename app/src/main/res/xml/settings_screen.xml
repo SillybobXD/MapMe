@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:entries="@array/languages"
+        android:entryValues="@array/languages"
+        android:key="languages_settings"
+        android:summary="English"
+        android:title="Languages" />
+
+    <ListPreference
+        android:entries="@array/distance_units"
+        android:entryValues="@array/distance_units"
+        android:key="distance_units"
+        android:summary="Km"
+        android:title="Distance Units" />
+
+
+    <ListPreference
+        android:entries="@array/radius_search"
+        android:entryValues="@array/radius_search"
+        android:key="radius_settings"
+        android:summary="100 Km"
+        android:title="Set Radius For Search" />
+
+</PreferenceScreen>
