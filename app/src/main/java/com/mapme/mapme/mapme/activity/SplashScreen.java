@@ -1,4 +1,4 @@
-package com.mapme.mapme.mapme;
+package com.mapme.mapme.mapme.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.mapme.mapme.mapme.R;
 
 public class SplashScreen extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.mapme.mapme.mapme.util;
+package com.mapme.mapme.mapme.activity;
 
 import android.app.Fragment;
 import android.content.SharedPreferences;
@@ -11,8 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
-import com.mapme.mapme.mapme.DrawerManager;
 import com.mapme.mapme.mapme.R;
+import com.mapme.mapme.mapme.util.DrawerManager;
 
 public class SettingsActivity extends AppCompatActivity {
 

@@ -18,20 +18,25 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDhHcrTpAfUIwo_R3XdL3L7x2vniELnXxE" />
-
-        <activity android:name=".MainActivity"></activity>
         <activity
-            android:name=".MapActivity"
+            android:name=".activity.MapActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".SplashScreen">
+        <activity
+            android:name=".activity.SplashScreen"
+            android:configChanges="orientation|screenSize|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".util.SettingsActivity" />
-        <activity android:name=".util.FavoritesActivity" />
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity
+            android:name=".activity.FavoritesActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
 
     </application>
 

@@ -4,7 +4,9 @@
     <color name="colorPrimaryDark">#414141</color>
     <color name="colorAccent">#87be83</color>
     <color name="yellow">#e4d943</color>
-
+    <color name="gps_active">#006600</color>
+    <color name="gps_activating">#cc0000</color>
+    <color name="gps_not_active">#1a1a1a</color>
 
     <!-- MaterialDrawer DEFAULT DARK colors -->
     <color name="material_drawer_dark_background">#303030</color>

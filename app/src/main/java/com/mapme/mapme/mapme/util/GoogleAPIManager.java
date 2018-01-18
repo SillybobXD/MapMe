@@ -3,6 +3,7 @@ package com.mapme.mapme.mapme.util;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.android.volley.Response;
@@ -34,6 +35,7 @@ public class GoogleAPIManager {
     private static final String TYPE_AUTOCOMPLETE = "/autocomplete";
     private static final String TYPE_DETAILS = "/details";
     private static final String TYPE_TEXT = "/textsearch";
+    private static final String TYPE_NEARBY = "/nearbysearch";
 
     //Types of outputs
     private static final String OUT_JSON = "/json?";
@@ -61,7 +63,8 @@ public class GoogleAPIManager {
         sb.append(PLACES_API_BASE)
                 .append(TYPE_AUTOCOMPLETE)
                 .append(OUT_JSON)
-                .append("input=" + formattedInput);
+                .append("input=" + formattedInput)
+                .append("&type=establishment");
         //.append("&type=establishment");
         if (location != null)
             sb.append("&location=" + location.getLatitude() + "," + location.getLongitude())
@@ -104,54 +107,7 @@ public class GoogleAPIManager {
 
     }
 
-    public static void autoCompleteAddress(String input, final IAutoCompleteResponse autoCompleteResponse) {
-        String formattedInput = formatString(input);
-        StringBuilder sb = new StringBuilder();
-        sb.append(PLACES_API_BASE)
-                .append(TYPE_TEXT)
-                .append(OUT_JSON)
-                .append("input=" + formattedInput)
-                .append("&type=geocode");
-        /*if (location != null)
-            sb.append("&location=" + location.getLatitude() + "," + location.getLongitude())
-                    .append("&radius=" + radius)
-                    .append("&strictbounds");*/
-        sb.append("&key=" + API_KEY);
-
-        JsonObjectRequest request = new JsonObjectRequest(sb.toString(), new JSONObject(), new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    // Create a JSON object hierarchy from the results
-                    JSONArray predsJsonArray = response.getJSONArray("predictions");
-                    ArrayList<Suggestion> resultList;
-                    resultList = new ArrayList<Suggestion>(predsJsonArray.length());
-                    for (int i = 0; i < predsJsonArray.length(); i++) {
-                        JSONObject structuredFormatting = predsJsonArray.getJSONObject(i).getJSONObject("structured_formatting");
-                        String mainText = structuredFormatting.getString("main_text");
-                        String secondaryText = "";
-                        if (structuredFormatting.has("secondary_text"))
-                            secondaryText = structuredFormatting.getString("secondary_text");
-                        String id = predsJsonArray.getJSONObject(i).getString("place_id");
-                        resultList.add(new Suggestion(id, mainText, secondaryText));
-                    }
-                    autoCompleteResponse.onResponse(resultList);
-                } catch (JSONException e) {
-                    Log.e(TAG, "Cannot process JSON results", e);
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                autoCompleteResponse.onFailure(error);
-            }
-        });
-
-        requestQueue.addToRequestQueue(request);
-    }
-
-    public static void getPlace(String id, final IGetPlaceResponse getPlaceResponse) {
+    public static void getPlaceByID(String id, final IGetSinglePlacesResponse getPlaceResponse) {
         StringBuilder sb = new StringBuilder();
         sb.append(PLACES_API_BASE)
                 .append(TYPE_DETAILS)
@@ -159,7 +115,7 @@ public class GoogleAPIManager {
                 .append("placeid=" + id)
                 .append("&key=" + API_KEY);
 
-        Log.d(TAG, "getPlace: " + sb.toString());
+        Log.d(TAG, "getPlaceByID: " + sb.toString());
 
         JsonObjectRequest request = new JsonObjectRequest(sb.toString(), new JSONObject(), new Response.Listener<JSONObject>() {
             @Override
@@ -208,13 +164,61 @@ public class GoogleAPIManager {
         requestQueue.addToRequestQueue(imageRequest);
     }
 
-    public static void getPlacesByText(String query, final IGetPlacesTextResponse getPlacesTextResponse) {
+    public static void getPlacesByText(String query, final IGetPlacesResponse getPlacesResponse) {
         StringBuilder sb = new StringBuilder();
         String formattedQuery = formatString(query);
         sb.append(PLACES_API_BASE)
                 .append(TYPE_TEXT)
                 .append(OUT_JSON)
                 .append("query=" + formattedQuery);
+        //.append("&type=establishment");
+        if (location != null)
+            sb.append("&location=" + location.getLatitude() + "," + location.getLongitude())
+                    .append("&radius=" + radius);
+        sb.append("&key=" + API_KEY);
+
+        Log.d(TAG, "getPlacesByText: " + sb.toString());
+
+        JsonObjectRequest request = new JsonObjectRequest(sb.toString(), new JSONObject(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                PlacesPage page;
+                ArrayList<Place> places = new ArrayList<>();
+                String nextPageToken = null;
+                String status = null;
+                try {
+                    JSONArray jsonArray = response.getJSONArray("results");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        places.add(convertPlaceFromJSON(jsonArray.getJSONObject(i)));
+                    }
+                    if (response.has("next_page_token"))
+                        nextPageToken = response.getString("next_page_token");
+                    status = response.getString("status");
+                } catch (JSONException e) {
+                    Log.d(TAG, "onResponse: " + e.toString());
+                }
+                page = new PlacesPage(places, status, nextPageToken);
+                getPlacesResponse.onResponse(page);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                getPlacesResponse.onFailure(error);
+            }
+        });
+
+        requestQueue.addToRequestQueue(request);
+    }
+
+    public static void getNearbyPlaces(@Nullable String input, final IGetPlacesResponse getPlacesResponse) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(PLACES_API_BASE)
+                .append(TYPE_NEARBY)
+                .append(OUT_JSON);
+        if (input != null && !input.isEmpty()) {
+            String formattedInput = formatString(input);
+            sb.append("keyword=" + formattedInput);
+        }
         if (location != null)
             sb.append("&location=" + location.getLatitude() + "," + location.getLongitude())
                     .append("&radius=" + radius);
@@ -223,77 +227,49 @@ public class GoogleAPIManager {
         JsonObjectRequest request = new JsonObjectRequest(sb.toString(), new JSONObject(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                PlacesPage page;
                 ArrayList<Place> places = new ArrayList<>();
+                String nextPageToken = null;
+                String status = null;
                 try {
                     JSONArray jsonArray = response.getJSONArray("results");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         places.add(convertPlaceFromJSON(jsonArray.getJSONObject(i)));
                     }
+                    if (response.has("next_page_token"))
+                        nextPageToken = response.getString("next_page_token");
+                    status = response.getString("status");
                 } catch (JSONException e) {
                     Log.d(TAG, "onResponse: " + e.toString());
                 }
-                getPlacesTextResponse.onResponse(places);
+                page = new PlacesPage(places, status, nextPageToken);
+                getPlacesResponse.onResponse(page);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                getPlacesTextResponse.onFailure(error);
+                getPlacesResponse.onFailure(error);
             }
         });
 
         requestQueue.addToRequestQueue(request);
     }
 
-    public static void getLocationByText(String query, final IGetLocationResponse getLocationResponse) {
-        /*StringBuilder sb = new StringBuilder();
-        String formattedQuery = formatString(query);
+    public static void getNextPage(String nextPageID) {
+        StringBuilder sb = new StringBuilder();
         sb.append(PLACES_API_BASE)
                 .append(TYPE_TEXT)
                 .append(OUT_JSON)
-                .append("query=" + formattedQuery)
-        if (location != null)
-            sb.append("&location=" + location.getLatitude() + "," + location.getLongitude())
-                    .append("&radius=" + radius);
-                .append("&key=" + API_KEY);*/
-        getPlacesByText(query, new IGetPlacesTextResponse() {
-            @Override
-            public void onResponse(ArrayList<Place> places) {
-                if (places != null && !places.isEmpty())
-                    getLocationResponse.onResponse(places.get(0).getLocation());
-            }
-
-            @Override
-            public void onFailure(VolleyError error) {
-                getLocationResponse.onFailure(error);
-            }
-        });
-    }
-
-    public static void getLocation(String id, final IGetLocationResponse getLocationResponse) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(PLACES_API_BASE)
-                .append(TYPE_DETAILS)
-                .append(OUT_JSON)
-                .append("placeid=" + id)
+                .append("pagetoken=" + nextPageID)
                 .append("&key=" + API_KEY);
         JsonObjectRequest request = new JsonObjectRequest(sb.toString(), new JSONObject(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                try {
-                    JSONObject resault = response.getJSONObject("result");
-                    JSONObject jsonLocation = resault.getJSONObject("geometry").getJSONObject("location");
-                    Location location = new Location("");
-                    location.setLatitude(jsonLocation.getDouble("lat"));
-                    location.setLongitude(jsonLocation.getDouble("lng"));
-                    getLocationResponse.onResponse(location);
-                } catch (JSONException e) {
 
-                }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                getLocationResponse.onFailure(error);
 
             }
         });
@@ -305,11 +281,20 @@ public class GoogleAPIManager {
         GoogleAPIManager.location = location;
     }
 
+    public static double getRadius() {
+        return radius;
+    }
+
     private static Place convertPlaceFromJSON(JSONObject jasonPlace) {
         Place place = new Place();
+        Log.d(TAG, "convertPlaceFromJSON: " + jasonPlace.toString());
         try {
+            if (jasonPlace.has("place_id"))
+                place.setId(jasonPlace.getString("place_id"));
+
             if (jasonPlace.has("formatted_address"))
                 place.setAddress(jasonPlace.getString("formatted_address"));
+
             if (jasonPlace.has("formatted_phone_number"))
                 place.setPhoneNumber(jasonPlace.getString("formatted_phone_number"));
 
@@ -347,6 +332,10 @@ public class GoogleAPIManager {
 
             if (jasonPlace.has("website"))
                 place.setWebsite(jasonPlace.getString("website"));
+
+            if (jasonPlace.has("formatted_phone_number "))
+                place.setPhoneNumber(jasonPlace.getString("formatted_phone_number"));
+
         } catch (JSONException e) {
             Log.d(TAG, "convertPlaceFromJSON: " + e);
         }
@@ -363,24 +352,65 @@ public class GoogleAPIManager {
         void onFailure(VolleyError error);
     }
 
-    public interface IGetPlaceResponse {
-        void onResponse(Place place);
-        void onFailure(VolleyError error);
-    }
-
     public interface IGetPhotoResponse {
         void onResponse(Bitmap photo);
         void onFailuer(VolleyError error);
     }
 
-    public interface IGetPlacesTextResponse {
-        void onResponse(ArrayList<Place> places);
+    public interface IGetPlacesResponse {
+        void onResponse(PlacesPage page);
 
         void onFailure(VolleyError error);
     }
 
-    public interface IGetLocationResponse {
-        void onResponse(Location location);
+    public interface IGetSinglePlacesResponse {
+        void onResponse(Place place);
+
         void onFailure(VolleyError error);
+    }
+
+    public static class PlacesPage {
+        private ArrayList<Place> places;
+        private String status;
+        private String nextPageKey;
+
+        public PlacesPage(ArrayList<Place> places, String status, @Nullable String nextPageKey) {
+            this.places = places;
+            this.nextPageKey = nextPageKey;
+            this.status = status;
+        }
+
+        public boolean isNextPageAvailable() {
+            return nextPageKey != null || nextPageKey.isEmpty();
+        }
+
+        public String getNextPageKey() {
+            return nextPageKey;
+        }
+
+        public ArrayList<Place> getPlaces() {
+            return places;
+        }
+
+        public String getStatus() {
+            return status;
+        }
+
+        public void addPage(PlacesPage nextPage) {
+            places.addAll(nextPage.getPlaces());
+
+            if (nextPage.isNextPageAvailable())
+                nextPageKey = null;
+            else
+                nextPageKey = nextPage.getNextPageKey();
+        }
+
+        @Override
+        public String toString() {
+            return "PlacesPage{" +
+                    "places=" + places +
+                    ", nextPageKey='" + nextPageKey + '\'' +
+                    '}';
+        }
     }
 }

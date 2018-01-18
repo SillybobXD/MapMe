@@ -9,6 +9,8 @@ import java.util.ArrayList;
  */
 
 public class Place {
+    //place_id
+    private String id;
     //formatted_address
     private String address;
     //formatted_phone_number
@@ -34,6 +36,14 @@ public class Place {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getPhoneNumber() {
@@ -104,6 +114,14 @@ public class Place {
 
     public void setWebsite(String website) {
         this.website = website;
+    }
+
+    public boolean hasPhoneNumber() {
+        return phoneNumber != null && !phoneNumber.isEmpty();
+    }
+
+    public boolean hasWebsite() {
+        return website != null && !website.isEmpty();
     }
 
     @Override

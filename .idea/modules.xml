@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/MapMe3.iml" filepath="$PROJECT_DIR$/MapMe3.iml" />
       <module fileurl="file://$PROJECT_DIR$/MikumiApp.iml" filepath="$PROJECT_DIR$/MikumiApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/mikumibeta.iml" filepath="$PROJECT_DIR$/mikumibeta.iml" />

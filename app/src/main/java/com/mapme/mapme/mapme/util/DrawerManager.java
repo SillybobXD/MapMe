@@ -1,11 +1,13 @@
-package com.mapme.mapme.mapme;
+package com.mapme.mapme.mapme.util;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.view.View;
 
-import com.mapme.mapme.mapme.util.FavoritesActivity;
-import com.mapme.mapme.mapme.util.SettingsActivity;
+import com.mapme.mapme.mapme.R;
+import com.mapme.mapme.mapme.activity.FavoritesActivity;
+import com.mapme.mapme.mapme.activity.MapActivity;
+import com.mapme.mapme.mapme.activity.SettingsActivity;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;

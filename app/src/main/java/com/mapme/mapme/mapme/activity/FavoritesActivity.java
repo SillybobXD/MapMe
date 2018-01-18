@@ -1,4 +1,4 @@
-package com.mapme.mapme.mapme.util;
+package com.mapme.mapme.mapme.activity;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,8 +13,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.mapme.mapme.mapme.DrawerManager;
 import com.mapme.mapme.mapme.R;
+import com.mapme.mapme.mapme.util.DrawerManager;
 
 import java.util.ArrayList;
 
@@ -64,7 +64,7 @@ public class FavoritesActivity extends AppCompatActivity {
 
                 Integer favoritesPlace = favoritesItems.get(itemsIndex);
 
-                TextView tv_title = convertView.findViewById(R.id.tv_placeName_itemFavorites);
+                TextView tv_title = convertView.findViewById(R.id.tv_place_name);
                 TextView tv_details = convertView.findViewById(R.id.tv_details_itemFavorites);
                 ImageView iv_place = convertView.findViewById(R.id.iv_itemFavorites);
 
