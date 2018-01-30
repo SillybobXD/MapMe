@@ -315,6 +315,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         adapter.setListener(new SuggestionsAdapter.OnItemViewClickListener() {
             @Override
             public void OnItemClickListener(int position, View v) {
+                for (Marker marker : markers) {
+                    marker.remove();
+                }
                 isSuggestionClicked = true;
                 hideKeyboard(mSearchBar);
                 Suggestion suggestion = (Suggestion) mSearchBar.getLastSuggestions().get(position);
@@ -323,6 +326,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 GoogleAPIManager.getPlaceByID(suggestion.getId(), new GoogleAPIManager.IGetSinglePlacesResponse() {
                     @Override
                     public void onResponse(Place place) {
+                        addMarker(place);
                         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(place.getLocation().getLatitude(), place.getLocation().getLongitude()), 500));
                     }
 
