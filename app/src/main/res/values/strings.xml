@@ -5,7 +5,7 @@
     <string name="favorites">Favorites</string>
 
 
-    <string-array name="languages">
+    <string-array name="language_preferences">
         <item>English</item>
         <item>עברית</item>
     </string-array>

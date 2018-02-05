@@ -2,36 +2,36 @@ package com.mapme.mapme.mapme.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 public class SharedPreferencesManager {
 
-    private static final String PREFERENCES_KEY = "MyPrefs";
-    private static final String LANGUAGE_KEY = "language_preferences";
-    private static final String UNITS_KEY = "units_preferences";
+
+    public static final String LANGUAGE_KEY = "language_preferences";
+    public static final String UNITS_KEY = "units_preferences";
+    public static final String RADIUS_KEY = "radius_preferences";
 
     private static SharedPreferences preferences;
-    private static Language language;
-    private static Munits mUnits;
 
     public static void init(Context context) {
-        preferences = context.getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
-        language = getLanguageFromPref();
-        mUnits = getUnitsFromPref();
+        preferences = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    private static Munits getUnitsFromPref() {
-        String myEnumString = preferences.getString(UNITS_KEY, mUnits.toString());
-        return mUnits.toMyEnum(myEnumString);
-
+    public static String getLanguage() {
+        String myEnumString = preferences.getString(LANGUAGE_KEY, Language.English.toString());
+        return myEnumString;
     }
 
-    private static Language getLanguageFromPref() {
-        String myEnumString = preferences.getString(LANGUAGE_KEY, language.toString());
-        return language.toMyEnum(myEnumString);
+    public static void setLanguage(Language lang) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(LANGUAGE_KEY, lang.toString());
+        editor.commit();
     }
 
     public Munits getUnits() {
-        return mUnits;
+        String myEnumString = preferences.getString(UNITS_KEY, Munits.Kilometer.toString());
+        return Munits.toMyEnum(myEnumString);
+
     }
 
     public static void setUnits(Munits units) {
@@ -40,18 +40,17 @@ public class SharedPreferencesManager {
         editor.commit();
     }
 
-    public Language getLanguage() {
-        return language;
+    public float getRadius() {
+        return preferences.getFloat(RADIUS_KEY, 50f);
     }
 
-    public static void setLanguage(Language lang) {
+    public static void setRadius(float radius) {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(LANGUAGE_KEY, lang.toString());
+        editor.putFloat(RADIUS_KEY, radius);
         editor.commit();
-
     }
 
-    enum Language {
+    public enum Language {
         English,
         Hebrew;
 
@@ -65,7 +64,7 @@ public class SharedPreferencesManager {
         }
     }
 
-    enum Munits {
+    public enum Munits {
         Kilometer,
         Mile;
 
@@ -78,6 +77,7 @@ public class SharedPreferencesManager {
             }
         }
     }
+
 
 }
 
