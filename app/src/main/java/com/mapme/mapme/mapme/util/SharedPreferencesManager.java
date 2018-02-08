@@ -28,6 +28,16 @@ public class SharedPreferencesManager {
         editor.commit();
     }
 
+    public static float getRadius() {
+        return preferences.getFloat(RADIUS_KEY, 50f);
+    }
+
+    public static void setRadius(float radius) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putFloat(RADIUS_KEY, radius);
+        editor.commit();
+    }
+
     public Munits getUnits() {
         String myEnumString = preferences.getString(UNITS_KEY, Munits.Kilometer.toString());
         return Munits.toMyEnum(myEnumString);
@@ -37,16 +47,6 @@ public class SharedPreferencesManager {
     public static void setUnits(Munits units) {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString(UNITS_KEY, units.toString());
-        editor.commit();
-    }
-
-    public float getRadius() {
-        return preferences.getFloat(RADIUS_KEY, 50f);
-    }
-
-    public static void setRadius(float radius) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putFloat(RADIUS_KEY, radius);
         editor.commit();
     }
 

@@ -59,7 +59,6 @@ import com.mapme.mapme.mapme.util.CustomSuggestionAdapter;
 import com.mapme.mapme.mapme.util.DrawerManager;
 import com.mapme.mapme.mapme.util.GoogleAPIManager;
 import com.mapme.mapme.mapme.util.SearchResultAdapter;
-import com.mapme.mapme.mapme.util.SharedPreferencesManager;
 import com.mapme.mapme.mapme.util.data.obj.Place;
 import com.mapme.mapme.mapme.util.data.obj.Suggestion;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -105,7 +104,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         //Init helper objects
         DrawerManager.makeDrawer(this);
         GoogleAPIManager.init(this);
-        SharedPreferencesManager.init(this);
 
         isLocationOn = false;
         isSuggestionClicked = false;

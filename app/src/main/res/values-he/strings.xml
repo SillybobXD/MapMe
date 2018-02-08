@@ -7,7 +7,7 @@
     <string name="settings">הגדרות</string>
     <string name="favorites">מועדפים</string>
 
-    <string-array name="languages">
+    <string-array name="language_preferences">
         <item>English</item>
         <item>עברית</item>
     </string-array>

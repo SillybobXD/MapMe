@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
 
     <SeekBar
-        android:id="@+id/seekbar"
+        android:id="@+id/seekbar_preferece"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="41dp"
+        android:max="19"
+        android:min="0" />
+
+    <TextView
+        android:id="@+id/tv_radius_preference"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="10"
+        android:textSize="25dp" />
+
 
 </LinearLayout>

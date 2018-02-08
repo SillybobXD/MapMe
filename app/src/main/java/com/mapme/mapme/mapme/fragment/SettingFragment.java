@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 
 import com.mapme.mapme.mapme.R;
 import com.mapme.mapme.mapme.util.DrawerManager;
+import com.mapme.mapme.mapme.util.GoogleAPIManager;
+import com.mapme.mapme.mapme.util.SeekBarPrefernce;
 import com.mapme.mapme.mapme.util.SharedPreferencesManager;
 
 import java.util.Locale;
@@ -21,6 +23,8 @@ public class SettingFragment extends PreferenceFragment implements SharedPrefere
 
     ListPreference languagesSettings;
     ListPreference unintsSettings;
+    SeekBarPrefernce seekBarPreference;
+
 
 
     @Override
@@ -30,6 +34,12 @@ public class SettingFragment extends PreferenceFragment implements SharedPrefere
 
         languagesSettings = (ListPreference) findPreference("language_preferences");
         languagesSettings.setSummary(SharedPreferencesManager.getLanguage());
+
+        unintsSettings = (ListPreference) findPreference("units_preferences");
+
+        seekBarPreference = (SeekBarPrefernce) findPreference("radius_preferences");
+
+        seekBarPreference.setSummary(String.valueOf((int) SharedPreferencesManager.getRadius()));
 
     }
 
@@ -66,13 +76,27 @@ public class SettingFragment extends PreferenceFragment implements SharedPrefere
                 Locale.setDefault(locale);
                 Configuration config = new Configuration();
                 config.locale = locale;
+                config.setLocale(locale);
                 getActivity().getBaseContext().getResources().updateConfiguration(config,
                         getActivity().getBaseContext().getResources().getDisplayMetrics());
 
                 DrawerManager.makeDrawer(getActivity());
+                break;
+
+            case SharedPreferencesManager.UNITS_KEY:
+                break;
+
+            case SharedPreferencesManager.RADIUS_KEY:
+                float radius = SharedPreferencesManager.getRadius();
+
+                seekBarPreference.setSummary(String.valueOf((int) radius));
+                GoogleAPIManager.setRadius(radius * 1000);
+                break;
 
 
         }
 
     }
+
+
 }

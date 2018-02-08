@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ListPreference
         android:entries="@array/language_preferences"
@@ -10,16 +11,14 @@
     <ListPreference
         android:entries="@array/distance_units"
         android:entryValues="@array/distance_units"
-        android:key="distance_units"
-        android:summary="Km"
+        android:key="units_preferences"
         android:title="Distance Units" />
 
 
-    <ListPreference
-        android:entries="@array/radius_search"
-        android:entryValues="@array/radius_search"
-        android:key="radius_settings"
-        android:summary="100 Km"
-        android:title="Set Radius For Search" />
+    <com.mapme.mapme.mapme.util.SeekBarPrefernce
+        android:key="radius_preferences"
+        android:title="Set Radius For Search"
+        app:dialogMessage="Set your radius" />
+
 
 </PreferenceScreen>

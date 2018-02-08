@@ -54,17 +54,14 @@ public class DrawerManager {
                             case 1:
                                 Intent mapIntent = new Intent(activity.getBaseContext(), MapActivity.class);
                                 activity.startActivity(mapIntent);
-                                activity.finish();
                                 break;
                             case 3:
                                 Intent favoritesIntent = new Intent(activity.getBaseContext(), FavoritesActivity.class);
                                 activity.startActivity(favoritesIntent);
-                                activity.finish();
                                 break;
                             case 4:
                                 Intent settingsIntent = new Intent(activity.getBaseContext(), SettingsActivity.class);
                                 activity.startActivity(settingsIntent);
-                                activity.finish();
                                 break;
 
                         }

@@ -55,6 +55,7 @@ public class GoogleAPIManager {
 
     public static void init(Context context) {
         requestQueue = RequestQueueSingleton.getInstance(context);
+        radius = SharedPreferencesManager.getRadius() * 1000;
     }
 
     public static void autoCompletePlace(String input, final IAutoCompleteResponse autoCompleteResponse) {
@@ -283,6 +284,10 @@ public class GoogleAPIManager {
 
     public static double getRadius() {
         return radius;
+    }
+
+    public static void setRadius(double otherRadius) {
+        radius = otherRadius;
     }
 
     private static Place convertPlaceFromJSON(JSONObject jasonPlace) {
