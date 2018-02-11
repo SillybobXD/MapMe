@@ -538,6 +538,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         View popupView = getLayoutInflater().inflate(R.layout.selected_place_fragment, null);
 
         RelativeLayout mainLayout = findViewById(R.id.mapActivity_cl_parent);
+        RelativeLayout mainLayout_land = findViewById(R.id.mapActivity_cl_parent_land);
 
         // create the popup window
         int width = LinearLayout.LayoutParams.MATCH_PARENT;
@@ -548,6 +549,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         // show the popup window
         popupWindow.showAtLocation(mainLayout, Gravity.CENTER, 0, 0);
+        //popupWindow.showAtLocation(mainLayout_land, Gravity.CENTER, 0, 0);
+
 
         // dismiss the popup window when touched
         /*popupView.setOnTouchListener(new View.OnTouchListener() {
