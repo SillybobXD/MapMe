@@ -87,10 +87,11 @@
 
             <ImageView
                 android:id="@+id/iv_dragView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="300dp"
+                android:layout_height="85dp"
                 android:layout_gravity="center"
-                app:srcCompat="@android:drawable/bottom_bar" />
+                android:scaleType="fitXY"
+                sothree:srcCompat="@drawable/bar" />
 
             <ListView
                 android:id="@+id/lv_results"

@@ -8,9 +8,11 @@
         android:id="@+id/cardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginRight="0dp"
-        android:layout_marginTop="0dp"
-        app:cardElevation="9dp"
+        android:layout_marginTop="10dp"
+        android:alpha="40"
+        app:cardBackgroundColor="@color/colorPrimary"
+        app:cardCornerRadius="7dp"
+        app:cardElevation="11dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -20,14 +22,15 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="493dp">
 
             <TextView
                 android:id="@+id/tv_phonenum_selected_place_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="64dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="45dp"
                 android:text="Phone Number"
                 android:textSize="17dp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -35,20 +38,20 @@
 
             <RatingBar
                 android:id="@+id/ratingBar"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_website_selected_place_fragment" />
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginStart="7dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent" />
 
             <ImageView
                 android:id="@+id/iv_selected_place_fragment"
                 android:layout_width="0dp"
                 android:layout_height="150dp"
-                android:layout_marginLeft="0dp"
-                android:layout_marginRight="0dp"
-                android:layout_marginTop="8dp"
+                android:scaleType="fitXY"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -59,47 +62,58 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="15dp"
                 android:text="Place name"
-                android:textSize="35dp"
+                android:textSize="28sp"
+                app:layout_constraintHorizontal_bias="0.048"
                 app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/iv_selected_place_fragment" />
 
             <TextView
                 android:id="@+id/tv_address_selected_place_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="11dp"
                 android:text="address"
                 android:textSize="25dp"
+                app:layout_constraintHorizontal_bias="0.03"
                 app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_name_selected_place_fragment" />
 
             <TextView
                 android:id="@+id/tv_website_selected_place_fragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="304dp"
+                android:layout_height="24dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="15dp"
                 android:text="Website"
                 android:textSize="17dp"
+                app:layout_constraintBottom_toTopOf="@+id/ratingBar"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_phonenum_selected_place_fragment" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_phonenum_selected_place_fragment"
+                app:layout_constraintVertical_bias="0.184" />
 
             <Button
                 android:id="@+id/btn_add_to_fav_selected_place_fragment"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginBottom="8dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginBottom="16dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginTop="8dp"
                 android:background="@drawable/ic_favorite_border_white_24dp"
-                app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/ratingBar"
-                app:layout_constraintVertical_bias="0.428" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
 

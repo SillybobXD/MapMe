@@ -33,9 +33,9 @@ public class DrawerManager {
                 .withHeaderBackground(R.drawable.logo_green)
                 .build();
 
-        PrimaryDrawerItem map = new PrimaryDrawerItem().withName(R.string.map);
-        SecondaryDrawerItem favorites = new SecondaryDrawerItem().withName(R.string.favorites);
-        SecondaryDrawerItem settings = new SecondaryDrawerItem().withName(R.string.settings);
+        PrimaryDrawerItem map = new PrimaryDrawerItem().withName(R.string.map).withIcon(R.drawable.ic_map_white_24dp);
+        SecondaryDrawerItem favorites = new SecondaryDrawerItem().withName(R.string.favorites).withIcon(R.drawable.ic_favorite_border_white_24dp);
+        SecondaryDrawerItem settings = new SecondaryDrawerItem().withName(R.string.settings).withIcon(R.drawable.ic_settings_white_24dp);
 
         drawer = new DrawerBuilder()
 

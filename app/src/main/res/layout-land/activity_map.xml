@@ -90,9 +90,9 @@
             <ImageView
                 android:id="@+id/iv_dragView"
                 android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                android:layout_height="80dp"
                 android:layout_gravity="right"
-                app:srcCompat="@android:drawable/bottom_bar" />
+                sothree:srcCompat="@drawable/bar" />
 
             <ListView
                 android:id="@+id/lv_results"
