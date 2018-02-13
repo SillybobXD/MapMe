@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Criteria;
@@ -21,6 +20,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -58,8 +58,10 @@ import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.mapme.mapme.mapme.R;
 import com.mapme.mapme.mapme.util.CustomSuggestionAdapter;
 import com.mapme.mapme.mapme.util.DrawerManager;
+import com.mapme.mapme.mapme.util.FavoriteManager;
 import com.mapme.mapme.mapme.util.GoogleAPIManager;
 import com.mapme.mapme.mapme.util.SearchResultAdapter;
+import com.mapme.mapme.mapme.util.ViewPagerAdapter;
 import com.mapme.mapme.mapme.util.data.obj.Place;
 import com.mapme.mapme.mapme.util.data.obj.Suggestion;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
@@ -76,6 +78,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final int LOCATION_PERMISSION_REQUEST = 1337;
     private static final int GPS_ON_REQUEST = 1338;
     boolean isSuggestionClicked;
+    FavoriteManager favoriteManager;
     //Location
     private LocationManager mLocationManager;
     private Location mCurrLocation;
@@ -88,8 +91,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private GoogleAPIManager.PlacesPage searchResultsPage;
     private Circle posCircle;
     private ArrayList<Marker> markers;
-    private Marker lastMarkerClicked;
-
     //UI elements
     private MaterialSearchBar mSearchBar;
     private FloatingActionButton mGPS;
@@ -105,6 +106,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         //Init helper objects
         DrawerManager.makeDrawer(this);
         GoogleAPIManager.init(this);
+        favoriteManager = new FavoriteManager(this);
 
         isLocationOn = false;
         isSuggestionClicked = false;
@@ -505,15 +507,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        /*if (lastMarkerClicked == null || lastMarkerClicked != marker) {
-            Log.d(TAG, "onMarkerClick: false");
-            return false;
-        } else {
-            Log.d(TAG, "onMarkerClick: true");
-            showPlaceView((Place) marker.getTag());
-            return true;
-        }
-        */
         Log.d(TAG, "onMarkerClick: " + marker.getTag());
         return false;
     }
@@ -534,7 +527,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
     }
 
-    public void showPlaceView(Place place) {
+    public void showPlaceView(final Place place) {
         Log.d(TAG, "showPlaceView");
         final View popupView = getLayoutInflater().inflate(R.layout.selected_place_fragment, null);
 
@@ -572,14 +565,27 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         // If you need the PopupWindow to dismiss when when touched outside
         popupWindow.setBackgroundDrawable(new ColorDrawable());
 
+        ViewPager images = popupView.findViewById(R.id.vp_images);
         Button closeWindow = popupView.findViewById(R.id.btn_close_selectedItemFragment);
-        final ImageView placeImage = popupView.findViewById(R.id.iv_selected_place_fragment);
         TextView placeName = popupView.findViewById(R.id.tv_name_selected_place_fragment);
         TextView placeAddress = popupView.findViewById(R.id.tv_address_selected_place_fragment);
         TextView placeNumber = popupView.findViewById(R.id.tv_phonenum_selected_place_fragment);
         TextView placeWebsite = popupView.findViewById(R.id.tv_website_selected_place_fragment);
         RatingBar ratingBar = popupView.findViewById(R.id.ratingBar);
+        final ImageView fav = popupView.findViewById(R.id.btn_add_to_fav_selected_place_fragment);
 
+        favoriteManager.isPlaceFavorite(place.getId(), new FavoriteManager.IIsFavoriteResult() {
+            @Override
+            public void result(boolean result) {
+                if (result) {
+                    if (result) {
+                        fav.getDrawable().mutate().setTint(ContextCompat.getColor(MapActivity.this, R.color.favorite_active));
+                    } else {
+                        fav.getDrawable().mutate().setTint(ContextCompat.getColor(MapActivity.this, R.color.favorite_not_active));
+                    }
+                }
+            }
+        });
         closeWindow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -588,19 +594,29 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
         if (place.getPhotos() != null && !place.getPhotos().isEmpty()) {
-            GoogleAPIManager.getPlacePhoto(place.getPhotos().get(0).getReference(),
-                    Math.max(place.getPhotos().get(0).getMaxWidth(), placeImage.getMaxWidth()),
-                    new GoogleAPIManager.IGetPhotoResponse() {
-                        @Override
-                        public void onResponse(Bitmap photo) {
-                            placeImage.setImageBitmap(photo);
+        fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                favoriteManager.isPlaceFavorite(place.getId(), new FavoriteManager.IIsFavoriteResult() {
+                    @Override
+                    public void result(boolean result) {
+                        if (result) {
+                            Log.d(TAG, "result: Removing from favorites");
+                            favoriteManager.removeFavorite(place.getId());
+                            fav.getDrawable().mutate().setTint(ContextCompat.getColor(MapActivity.this, R.color.favorite_not_active));
+                        } else {
+                            Log.d(TAG, "result: Adding from favorites");
+                            favoriteManager.addFavorite(place);
+                            fav.getDrawable().mutate().setTint(ContextCompat.getColor(MapActivity.this, R.color.favorite_active));
                         }
+                    }
+                });
+            }
+        });
 
-                        @Override
-                        public void onFailuer(VolleyError error) {
-
-                        }
-                    });
+        if (place.getPhotos() != null && !place.getPhotos().isEmpty()) {
+            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, place.getPhotos());
+            images.setAdapter(viewPagerAdapter);
         }
 
         placeName.setText(place.getPlaceName());

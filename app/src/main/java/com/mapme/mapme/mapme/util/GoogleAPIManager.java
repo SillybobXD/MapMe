@@ -414,6 +414,7 @@ public class GoogleAPIManager {
         public String toString() {
             return "PlacesPage{" +
                     "places=" + places +
+                    ", status='" + status + '\'' +
                     ", nextPageKey='" + nextPageKey + '\'' +
                     '}';
         }

@@ -8,6 +8,9 @@
     <color name="gps_activating">#cc0000</color>
     <color name="gps_not_active">#1a1a1a</color>
 
+    <color name="favorite_not_active">#bbb</color>
+    <color name="favorite_active">#cc0000</color>
+
     <!-- MaterialDrawer DEFAULT DARK colors -->
     <color name="material_drawer_dark_background">#303030</color>
     <!-- MaterialDrawer DEFAULT DARK text / items colors -->

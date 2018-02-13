@@ -52,32 +52,20 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_website_selected_place_fragment" />
 
-            <ImageView
-                android:id="@+id/iv_selected_place_fragment"
-                android:layout_width="0dp"
-                android:layout_height="150dp"
-                android:scaleType="fitXY"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@android:drawable/ic_menu_report_image" />
-
             <TextView
                 android:id="@+id/tv_name_selected_place_fragment"
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="8dp"
                 android:text="Place name"
                 android:textSize="25sp"
                 app:layout_constraintHorizontal_bias="0.048"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_selected_place_fragment" />
+                app:layout_constraintTop_toBottomOf="@+id/vp_images" />
 
             <TextView
                 android:id="@+id/tv_address_selected_place_fragment"
@@ -107,13 +95,17 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_phonenum_selected_place_fragment" />
 
-            <Button
+            <ImageView
                 android:id="@+id/btn_add_to_fav_selected_place_fragment"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginRight="8dp"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_marginBottom="12dp"
                 android:layout_marginLeft="8dp"
-                android:background="@drawable/ic_favorite_border_white_24dp"
+                android:srcCompat="@drawable/ic_favorite_border_white_24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
@@ -125,7 +117,20 @@
                 android:layout_marginRight="8dp"
                 android:background="@drawable/ic_close_black_48dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent" />
+                app:layout_constraintRight_toRightOf="parent"
+                app:srcCompat="@drawable/ic_favorite_border_white_24dp" />
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/vp_images"
+                android:layout_width="wrap_content"
+                android:layout_height="175dp"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="0dp"
+                android:layout_marginTop="0dp"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
 
