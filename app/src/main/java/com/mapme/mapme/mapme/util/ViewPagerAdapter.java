@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.android.volley.VolleyError;
 import com.mapme.mapme.mapme.R;
@@ -20,6 +21,9 @@ import java.util.ArrayList;
  */
 
 public class ViewPagerAdapter extends PagerAdapter {
+
+
+    ProgressBar progressBar;
 
     private Context context;
     private LayoutInflater layoutInflater;
