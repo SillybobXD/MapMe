@@ -29,6 +29,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -535,7 +536,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     public void showPlaceView(Place place) {
         Log.d(TAG, "showPlaceView");
-        View popupView = getLayoutInflater().inflate(R.layout.selected_place_fragment, null);
+        final View popupView = getLayoutInflater().inflate(R.layout.selected_place_fragment, null);
+
 
         RelativeLayout mainLayout = findViewById(R.id.mapActivity_cl_parent);
         RelativeLayout mainLayout_land = findViewById(R.id.mapActivity_cl_parent_land);
@@ -563,11 +565,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         // Initialize more widgets from `popup_layout.xml`
         // If the PopupWindow should be focusable
+
+
         popupWindow.setFocusable(true);
 
         // If you need the PopupWindow to dismiss when when touched outside
         popupWindow.setBackgroundDrawable(new ColorDrawable());
 
+        Button closeWindow = popupView.findViewById(R.id.btn_close_selectedItemFragment);
         final ImageView placeImage = popupView.findViewById(R.id.iv_selected_place_fragment);
         TextView placeName = popupView.findViewById(R.id.tv_name_selected_place_fragment);
         TextView placeAddress = popupView.findViewById(R.id.tv_address_selected_place_fragment);
@@ -575,6 +580,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         TextView placeWebsite = popupView.findViewById(R.id.tv_website_selected_place_fragment);
         RatingBar ratingBar = popupView.findViewById(R.id.ratingBar);
 
+        closeWindow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                popupWindow.dismiss();
+            }
+        });
         if (place.getPhotos() != null && !place.getPhotos().isEmpty()) {
             GoogleAPIManager.getPlacePhoto(place.getPhotos().get(0).getReference(),
                     Math.max(place.getPhotos().get(0).getMaxWidth(), placeImage.getMaxWidth()),

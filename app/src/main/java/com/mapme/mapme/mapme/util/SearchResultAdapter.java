@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,7 +38,6 @@ public class SearchResultAdapter extends ArrayAdapter<Place> {
         TextView placeName = convertView.findViewById(R.id.tv_place_name);
         TextView placeAddress = convertView.findViewById(R.id.tv_place_address);
         final ImageView placeImage = convertView.findViewById(R.id.iv_place_image);
-        Button placeFavorite = convertView.findViewById(R.id.btn_place_favorite);
 
         placeName.setText(place.getPlaceName());
         placeAddress.setText(place.getAddress());

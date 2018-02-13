@@ -8,10 +8,10 @@
         android:id="@+id/cardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="6dp"
         android:alpha="40"
         app:cardBackgroundColor="@color/colorPrimary"
-        app:cardCornerRadius="7dp"
+        app:cardCornerRadius="10dp"
         app:cardElevation="11dp"
         app:cardUseCompatPadding="true"
         app:layout_constraintHorizontal_bias="0.0"
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="45dp"
+                android:layout_marginTop="20dp"
                 android:text="Phone Number"
                 android:textSize="17dp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -38,14 +38,19 @@
 
             <RatingBar
                 android:id="@+id/ratingBar"
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="7dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:layout_marginStart="7dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent" />
+                android:layout_marginTop="15dp"
+                android:clickable="false"
+                android:isIndicator="true"
+
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_website_selected_place_fragment" />
 
             <ImageView
                 android:id="@+id/iv_selected_place_fragment"
@@ -68,7 +73,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="15dp"
                 android:text="Place name"
-                android:textSize="28sp"
+                android:textSize="25sp"
                 app:layout_constraintHorizontal_bias="0.048"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -94,24 +99,31 @@
                 android:id="@+id/tv_website_selected_place_fragment"
                 android:layout_width="304dp"
                 android:layout_height="24dp"
-                android:layout_marginBottom="8dp"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="15dp"
                 android:text="Website"
                 android:textSize="17dp"
-                app:layout_constraintBottom_toTopOf="@+id/ratingBar"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_phonenum_selected_place_fragment"
-                app:layout_constraintVertical_bias="0.184" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_phonenum_selected_place_fragment" />
 
             <Button
                 android:id="@+id/btn_add_to_fav_selected_place_fragment"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_marginBottom="16dp"
-                android:layout_marginRight="8dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="8dp"
                 android:background="@drawable/ic_favorite_border_white_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <Button
+                android:id="@+id/btn_close_selectedItemFragment"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginRight="8dp"
+                android:background="@drawable/ic_close_black_48dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
 

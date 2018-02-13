@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#939393</color>
     <color name="colorPrimaryDark">#414141</color>
-    <color name="colorAccent">#87be83</color>
+    <color name="colorAccent">#ccd16c</color>
     <color name="yellow">#e4d943</color>
     <color name="gps_active">#006600</color>
     <color name="gps_activating">#cc0000</color>
