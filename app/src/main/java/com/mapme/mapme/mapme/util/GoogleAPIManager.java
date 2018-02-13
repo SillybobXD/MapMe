@@ -42,7 +42,7 @@ public class GoogleAPIManager {
     private static final String OUT_PHOTO = "/photo?";
 
     //API key (Debug)
-    private static final String API_KEY = "AIzaSyDhHcrTpAfUIwo_R3XdL3L7x2vniELnXxE";
+    private static final String API_KEY = "AIzaSyD_YGBsh8Yb1EzyaUcARl1YZDXZVlEDRlI";
 
     //User location
     private static Location location;
