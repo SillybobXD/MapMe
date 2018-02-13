@@ -4,6 +4,14 @@
     <string name="settings">Settings</string>
     <string name="favorites">Favorites</string>
 
+    <string name="search_location">Search Location</string>
+    <string name="enter_location">Enter location</string>
+
+    <string name="set_Language">Set Language</string>
+    <string name="distance_units">Distance Units</string>
+    <string name="set_radius_for_search">Set Radius For Search"</string>
+    <string name="set_your_radius">Set your radius</string>
+
 
     <string-array name="language_preferences">
         <item>English</item>

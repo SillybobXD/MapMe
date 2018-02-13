@@ -6,19 +6,19 @@
         android:entries="@array/language_preferences"
         android:entryValues="@array/language_preferences"
         android:key="language_preferences"
-        android:title="Languages" />
+        android:title="@string/set_Language" />
 
     <ListPreference
         android:entries="@array/distance_units"
         android:entryValues="@array/distance_units"
         android:key="units_preferences"
-        android:title="Distance Units" />
+        android:title="@string/distance_units" />
 
 
     <com.mapme.mapme.mapme.util.SeekBarPrefernce
         android:key="radius_preferences"
-        android:title="Set Radius For Search"
-        app:dialogMessage="Set your radius" />
+        android:title="@string/set_radius_for_search"
+        app:dialogMessage="@string/set_your_radius" />
 
 
 </PreferenceScreen>
