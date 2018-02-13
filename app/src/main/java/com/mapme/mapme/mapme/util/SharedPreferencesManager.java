@@ -38,16 +38,18 @@ public class SharedPreferencesManager {
         editor.commit();
     }
 
-    public Munits getUnits() {
-        String myEnumString = preferences.getString(UNITS_KEY, Munits.Kilometer.toString());
-        return Munits.toMyEnum(myEnumString);
-
+    public static String getUnits() {
+        return preferences.getString(UNITS_KEY, "Km");
     }
 
-    public static void setUnits(Munits units) {
+    public static void setUnits(String units) {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(UNITS_KEY, units.toString());
+        editor.putString(UNITS_KEY, units);
         editor.commit();
+    }
+
+    public static SharedPreferences getSharedPreferences() {
+        return preferences;
     }
 
     public enum Language {
@@ -60,20 +62,6 @@ public class SharedPreferencesManager {
             } catch (Exception ex) {
                 // For error cases
                 return Hebrew;
-            }
-        }
-    }
-
-    public enum Munits {
-        Kilometer,
-        Mile;
-
-        public static Munits toMyEnum(String myEnumString) {
-            try {
-                return valueOf(myEnumString);
-            } catch (Exception ex) {
-                // For error cases
-                return Kilometer;
             }
         }
     }

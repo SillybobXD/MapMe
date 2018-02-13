@@ -38,8 +38,12 @@ public class SeekBarPrefernce extends DialogPreference implements SeekBar.OnSeek
         radius = view.findViewById(R.id.tv_radius_preference);
         seekBar = view.findViewById(R.id.seekbar_preferece);
 
+        radiusValue = SharedPreferencesManager.getRadius();
+
+        seekBar.setProgress((int) (radiusValue - 5) / 5);
+        radius.setText(String.valueOf((int) radiusValue) + " Km");
+
         seekBar.setOnSeekBarChangeListener(this);
-        seekBar.setProgress(((int) SharedPreferencesManager.getRadius() - 5) / 5);
 
         return view;
     }
@@ -52,17 +56,14 @@ public class SeekBarPrefernce extends DialogPreference implements SeekBar.OnSeek
             persistFloat(radiusValue);
         }
 
-
     }
 
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
         radiusValue = 5 + (progress * 5f);
 
-        radius.setText(String.valueOf((int) radiusValue));
-
+        radius.setText(String.valueOf((int) radiusValue) + " Km");
     }
 
     @Override
