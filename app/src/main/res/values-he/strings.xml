@@ -7,11 +7,18 @@
     <string name="settings">הגדרות</string>
     <string name="favorites">מועדפים</string>
 
+    <string name="search_location">חפש מקום</string>
+    <string name="enter_location">הכנס מקום לחיפוש</string>
+
+    <string name="set_Language">הגדר שפה</string>
+    <string name="distance_units">מידת מרחק</string>
+    <string name="set_radius_for_search">הגדר מרחק לחיפוש"</string>
+    <string name="set_your_radius">הגדר מרחק</string>
+
     <string-array name="language_preferences">
         <item>English</item>
         <item>עברית</item>
     </string-array>
-
     <string-array name="distance_units">
         <item>Km</item>
         <item>Mil</item>
