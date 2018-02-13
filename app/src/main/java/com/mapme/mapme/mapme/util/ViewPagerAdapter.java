@@ -24,15 +24,24 @@ public class ViewPagerAdapter extends PagerAdapter {
     private Context context;
     private LayoutInflater layoutInflater;
     private ArrayList<Photo> images;
+    private String photoRef;
 
     public ViewPagerAdapter(Context context, ArrayList<Photo> images) {
         this.context = context;
         this.images = images;
     }
 
+    public ViewPagerAdapter(Context context, String photoRef) {
+        this.context = context;
+        this.photoRef = photoRef;
+    }
+
     @Override
     public int getCount() {
-        return images.size();
+        if (images != null)
+            return images.size();
+        else
+            return 1;
     }
 
     @Override
@@ -47,19 +56,23 @@ public class ViewPagerAdapter extends PagerAdapter {
         View view = layoutInflater.inflate(R.layout.viewpager_image, null);
         final ImageView imageView = view.findViewById(R.id.iv_viewpager);
 
-        Photo photo = images.get(position);
-        GoogleAPIManager.getPlacePhoto(photo.getReference(), photo.getMaxWidth(),
-                new GoogleAPIManager.IGetPhotoResponse() {
-                    @Override
-                    public void onResponse(Bitmap photo) {
-                        imageView.setImageBitmap(photo);
-                    }
+        if (images != null) {
+            Photo photo = images.get(position);
+            GoogleAPIManager.getPlacePhoto(photo.getReference(), photo.getMaxWidth(),
+                    new GoogleAPIManager.IGetPhotoResponse() {
+                        @Override
+                        public void onResponse(Bitmap photo) {
+                            imageView.setImageBitmap(photo);
+                        }
 
-                    @Override
-                    public void onFailuer(VolleyError error) {
+                        @Override
+                        public void onFailuer(VolleyError error) {
 
-                    }
-                });
+                        }
+                    });
+        } else {
+            imageView.setImageBitmap(new ImageSaver(context).load(photoRef));
+        }
 
         ViewPager vp = (ViewPager) container;
         vp.addView(view, 0);

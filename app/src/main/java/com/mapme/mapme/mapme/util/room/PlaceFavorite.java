@@ -35,6 +35,9 @@ public class PlaceFavorite {
     private String website;
 
     public PlaceFavorite() {
+        phoneNumber = "";
+        photoPath = "";
+        website = "";
     }
 
     public PlaceFavorite(Place place) {
@@ -48,8 +51,6 @@ public class PlaceFavorite {
         isPremClosed = place.isPremClosed();
         rating = place.getRating();
         website = place.getWebsite();
-
-        photoPath = "";
     }
 
     public PlaceFavorite(Place place, String photo) {
@@ -135,6 +136,14 @@ public class PlaceFavorite {
 
     public void setWebsite(String website) {
         this.website = website;
+    }
+
+    public boolean hasPhoneNumber() {
+        return phoneNumber != "";
+    }
+
+    public boolean hasWebsite() {
+        return website != "";
     }
 
     @Dao
