@@ -48,31 +48,18 @@
             app:layout_constraintRight_toLeftOf="@+id/iv_place_image"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/btn_place_favorite"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="8dp"
-            android:background="@drawable/ic_favorite_border_white_24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent" />
-
         <TextView
             android:id="@+id/tv_place_address"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="1dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="2dp"
             android:layout_marginTop="7dp"
             android:text="Details"
-            app:layout_constraintBottom_toTopOf="@+id/btn_place_favorite"
             app:layout_constraintHorizontal_bias="0.045"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@+id/iv_place_image"
-            app:layout_constraintTop_toBottomOf="@+id/tv_place_name"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_place_name" />
 
     </android.support.constraint.ConstraintLayout>
 

@@ -39,6 +39,7 @@ public class SeekBarPrefernce extends DialogPreference implements SeekBar.OnSeek
         seekBar = view.findViewById(R.id.seekbar_preferece);
 
         seekBar.setOnSeekBarChangeListener(this);
+        seekBar.setProgress(((int) SharedPreferencesManager.getRadius() - 5) / 5);
 
         return view;
     }
@@ -58,7 +59,7 @@ public class SeekBarPrefernce extends DialogPreference implements SeekBar.OnSeek
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-        radiusValue = 10 + (progress * 10f);
+        radiusValue = 5 + (progress * 5f);
 
         radius.setText(String.valueOf((int) radiusValue));
 
