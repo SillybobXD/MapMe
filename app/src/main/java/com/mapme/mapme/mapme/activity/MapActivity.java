@@ -34,6 +34,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -74,9 +75,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     //TAG
     private static final String TAG = MapActivity.class.getSimpleName();
-
     private static final int LOCATION_PERMISSION_REQUEST = 1337;
     private static final int GPS_ON_REQUEST = 1338;
+    ProgressBar progressBar;
     boolean isSuggestionClicked;
     FavoriteManager favoriteManager;
     //Location
@@ -102,6 +103,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        progressBar = (ProgressBar) findViewById(R.id.progressBar_mapActivity);
+        progressBar.setVisibility(View.GONE);
 
         //Init helper objects
         DrawerManager.makeDrawer(this);
@@ -594,42 +598,43 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
         if (place.getPhotos() != null && !place.getPhotos().isEmpty()) {
-        fav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                favoriteManager.isPlaceFavorite(place.getId(), new FavoriteManager.IIsFavoriteResult() {
-                    @Override
-                    public void result(boolean result) {
-                        if (result) {
-                            Log.d(TAG, "result: Removing from favorites");
-                            favoriteManager.removeFavorite(place.getId());
-                            fav.getDrawable().mutate().setTint(ContextCompat.getColor(MapActivity.this, R.color.favorite_not_active));
-                        } else {
-                            Log.d(TAG, "result: Adding from favorites");
-                            favoriteManager.addFavorite(place);
-                            fav.getDrawable().mutate().setTint(ContextCompat.getColor(MapActivity.this, R.color.favorite_active));
+            fav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    favoriteManager.isPlaceFavorite(place.getId(), new FavoriteManager.IIsFavoriteResult() {
+                        @Override
+                        public void result(boolean result) {
+                            if (result) {
+                                Log.d(TAG, "result: Removing from favorites");
+                                favoriteManager.removeFavorite(place.getId());
+                                fav.getDrawable().mutate().setTint(ContextCompat.getColor(MapActivity.this, R.color.favorite_not_active));
+                            } else {
+                                Log.d(TAG, "result: Adding from favorites");
+                                favoriteManager.addFavorite(place);
+                                fav.getDrawable().mutate().setTint(ContextCompat.getColor(MapActivity.this, R.color.favorite_active));
+                            }
                         }
-                    }
-                });
+                    });
+                }
+            });
+
+            if (place.getPhotos() != null && !place.getPhotos().isEmpty()) {
+                ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, place.getPhotos());
+                images.setAdapter(viewPagerAdapter);
             }
-        });
 
-        if (place.getPhotos() != null && !place.getPhotos().isEmpty()) {
-            ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this, place.getPhotos());
-            images.setAdapter(viewPagerAdapter);
-        }
+            placeName.setText(place.getPlaceName());
+            placeAddress.setText(place.getAddress());
+            if (place.hasPhoneNumber())
+                placeNumber.setText(place.getPhoneNumber());
+            if (place.hasWebsite())
+                placeWebsite.setText(place.getWebsite());
+            ratingBar.setRating((float) place.getRating());
 
-        placeName.setText(place.getPlaceName());
-        placeAddress.setText(place.getAddress());
-        if (place.hasPhoneNumber())
-            placeNumber.setText(place.getPhoneNumber());
-        if (place.hasWebsite())
-            placeWebsite.setText(place.getWebsite());
-        ratingBar.setRating((float) place.getRating());
-
-        // Using location, the PopupWindow will be displayed right under anchorView
+            // Using location, the PopupWindow will be displayed right under anchorView
         /*popupWindow.showAtLocation(anchorView, Gravity.NO_GRAVITY,
                 location[0], location[1] + anchorView.getHeight());*/
+        }
     }
 
     /* Our custom LocationSource.
@@ -683,7 +688,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 }
                 locationManager.requestLocationUpdates(bestAvailableProvider, minTime, minDistance, this);
                 mGPS.getDrawable().mutate().setTint(ContextCompat.getColor(MapActivity.this, R.color.gps_activating));
+                progressBar.setVisibility(View.VISIBLE);
             } else {
+
                 // (Display a message/dialog) No Location Providers currently available.
             }
         }
@@ -708,6 +715,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             if (mListener != null) {
                 mListener.onLocationChanged(location);
                 mGPS.getDrawable().mutate().setTint(ContextCompat.getColor(MapActivity.this, R.color.gps_active));
+                progressBar.setVisibility(View.GONE);
                 drawRadius(location);
                 if (isFirstUpdate) {
                     isFirstUpdate = false;

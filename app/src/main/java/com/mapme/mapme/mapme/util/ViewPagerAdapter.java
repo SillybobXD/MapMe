@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.android.volley.VolleyError;
 import com.mapme.mapme.mapme.R;
@@ -20,6 +21,9 @@ import java.util.ArrayList;
  */
 
 public class ViewPagerAdapter extends PagerAdapter {
+
+
+    ProgressBar progressBar;
 
     private Context context;
     private LayoutInflater layoutInflater;
@@ -47,12 +51,14 @@ public class ViewPagerAdapter extends PagerAdapter {
         View view = layoutInflater.inflate(R.layout.viewpager_image, null);
         final ImageView imageView = view.findViewById(R.id.iv_viewpager);
 
+
         Photo photo = images.get(position);
         GoogleAPIManager.getPlacePhoto(photo.getReference(), photo.getMaxWidth(),
                 new GoogleAPIManager.IGetPhotoResponse() {
                     @Override
                     public void onResponse(Bitmap photo) {
                         imageView.setImageBitmap(photo);
+
                     }
 
                     @Override

@@ -20,6 +20,7 @@
             android:value="AIzaSyDhHcrTpAfUIwo_R3XdL3L7x2vniELnXxE" />
         <activity
             android:name=".activity.MapActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.SplashScreen"
