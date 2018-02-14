@@ -68,6 +68,10 @@ public class SettingsActivity extends LocalizationActivity implements SharedPref
                 }
                 break;
 
+            case SharedPreferencesManager.UNITS_KEY:
+                settingFragment.unitsPreference.setSummary(SharedPreferencesManager.getUnits());
+                break;
+
             case SharedPreferencesManager.RADIUS_KEY:
                 float radius = SharedPreferencesManager.getRadius();
                 GoogleAPIManager.setRadius(radius * 1000);

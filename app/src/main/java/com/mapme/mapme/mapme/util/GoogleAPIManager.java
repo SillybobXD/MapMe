@@ -142,8 +142,10 @@ public class GoogleAPIManager {
     public static void getPlacePhoto(String reference, int width, final IGetPhotoResponse getPhotoResponse) {
         StringBuilder sb = new StringBuilder();
         sb.append(PLACES_API_BASE)
-                .append(OUT_PHOTO)
-                .append("maxwidth=" + width)
+                .append(OUT_PHOTO);
+        if (width > 1500)
+            width = 800;
+        sb.append("maxwidth=" + width)
                 .append("&photoreference=" + reference)
                 .append("&key=" + API_KEY);
 
@@ -256,22 +258,39 @@ public class GoogleAPIManager {
         requestQueue.addToRequestQueue(request);
     }
 
-    public static void getNextPage(String nextPageID) {
+    public static void getNextPage(String nextPageID, final IGetPlacesResponse getPlacesResponse) {
         StringBuilder sb = new StringBuilder();
         sb.append(PLACES_API_BASE)
                 .append(TYPE_TEXT)
                 .append(OUT_JSON)
                 .append("pagetoken=" + nextPageID)
                 .append("&key=" + API_KEY);
+
         JsonObjectRequest request = new JsonObjectRequest(sb.toString(), new JSONObject(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
+                PlacesPage page;
+                ArrayList<Place> places = new ArrayList<>();
+                String nextPageToken = null;
+                String status = null;
+                try {
+                    JSONArray jsonArray = response.getJSONArray("results");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        places.add(convertPlaceFromJSON(jsonArray.getJSONObject(i)));
+                    }
+                    if (response.has("next_page_token"))
+                        nextPageToken = response.getString("next_page_token");
+                    status = response.getString("status");
+                } catch (JSONException e) {
+                    Log.d(TAG, "onResponse: " + e.toString());
+                }
+                page = new PlacesPage(places, status, nextPageToken);
+                getPlacesResponse.onResponse(page);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                getPlacesResponse.onFailure(error);
             }
         });
 
@@ -354,11 +373,13 @@ public class GoogleAPIManager {
 
     public interface IAutoCompleteResponse {
         void onResponse(ArrayList<Suggestion> response);
+
         void onFailure(VolleyError error);
     }
 
     public interface IGetPhotoResponse {
         void onResponse(Bitmap photo);
+
         void onFailuer(VolleyError error);
     }
 

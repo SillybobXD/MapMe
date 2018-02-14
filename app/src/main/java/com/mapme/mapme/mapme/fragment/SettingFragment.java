@@ -15,7 +15,8 @@ import com.mapme.mapme.mapme.util.SharedPreferencesManager;
 
 public class SettingFragment extends PreferenceFragment {
 
-    public ListPreference languagesSettings;
+    public ListPreference languagesPreference;
+    public ListPreference unitsPreference;
     public SeekBarPrefernce seekBarPreference;
 
     @Override
@@ -23,11 +24,13 @@ public class SettingFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.settings_screen);
 
-        languagesSettings = (ListPreference) findPreference("language_preferences");
-        languagesSettings.setSummary(SharedPreferencesManager.getLanguage());
+        languagesPreference = (ListPreference) findPreference("language_preferences");
+        languagesPreference.setSummary(SharedPreferencesManager.getLanguage());
+
+        unitsPreference = (ListPreference) findPreference("units_preferences");
+        unitsPreference.setSummary(SharedPreferencesManager.getUnits());
 
         seekBarPreference = (SeekBarPrefernce) findPreference("radius_preferences");
-
         seekBarPreference.setSummary(String.valueOf((int) SharedPreferencesManager.getRadius()) + " Km");
 
     }

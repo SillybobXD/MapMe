@@ -28,6 +28,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -97,6 +98,7 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
     private FloatingActionButton mGPS;
     private SupportMapFragment mMapFragment;
     private ListView mSearchResults;
+    private SearchResultAdapter mSearchResultAdapter;
     private SlidingUpPanelLayout mSlidingUpPanelLayout;
 
     @Override
@@ -207,6 +209,38 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
             public void onSearchConfirmed(CharSequence text) {
                 Log.d(TAG, "onSearchConfirmed: ");
                 hideKeyboard(mSearchBar);
+                final GoogleAPIManager.IGetPlacesResponse getNextPage = new GoogleAPIManager.IGetPlacesResponse() {
+                    @Override
+                    public void onResponse(GoogleAPIManager.PlacesPage page) {
+                        Log.d(TAG, "onResponse: " + page.toString());
+                        searchResultsPage.addPage(page);
+                        mSearchResultAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFailure(VolleyError error) {
+
+                    }
+                };
+                final AbsListView.OnScrollListener onScrollListener = new AbsListView.OnScrollListener() {
+
+                    @Override
+                    public void onScrollStateChanged(AbsListView absListView, int i) {
+
+                    }
+
+                    @Override
+                    public void onScroll(AbsListView absListView, final int firstVisibleItem,
+                                         final int visibleItemCount, final int totalItemCount) {
+
+                        final int lastItem = firstVisibleItem + visibleItemCount;
+                        if (lastItem == totalItemCount) {
+                            if (searchResultsPage.isNextPageAvailable())
+                                GoogleAPIManager.getNextPage(searchResultsPage.getNextPageKey(), getNextPage);
+                        }
+                    }
+                };
+
                 for (Marker marker : markers) {
                     marker.remove();
                 }
@@ -219,7 +253,7 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
                                 case "OK":
                                     searchResultsPage = page;
                                     ArrayList<Place> places = page.getPlaces();
-                                    mSearchResults.setAdapter(new SearchResultAdapter(MapActivity.this, places) {
+                                    mSearchResultAdapter = new SearchResultAdapter(MapActivity.this, places, mCurrLocation) {
                                         @NonNull
                                         @Override
                                         public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -234,7 +268,11 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
                                             });
                                             return view;
                                         }
-                                    });
+                                    };
+
+                                    mSearchResults.setAdapter(mSearchResultAdapter);
+                                    mSearchResults.setOnScrollListener(onScrollListener);
+
                                     for (Place place : places) {
                                         addMarker(place);
                                     }
@@ -266,7 +304,7 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
                                     Log.d(TAG, "onResponse: " + page);
                                     searchResultsPage = page;
                                     ArrayList<Place> places = page.getPlaces();
-                                    mSearchResults.setAdapter(new SearchResultAdapter(MapActivity.this, places) {
+                                    mSearchResultAdapter = new SearchResultAdapter(MapActivity.this, places) {
                                         @NonNull
                                         @Override
                                         public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -281,7 +319,9 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
                                             });
                                             return view;
                                         }
-                                    });
+                                    };
+                                    mSearchResults.setAdapter(mSearchResultAdapter);
+                                    mSearchResults.setOnScrollListener(onScrollListener);
                                     for (Place place : places) {
                                         addMarker(place);
                                     }
@@ -700,6 +740,7 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
         @Override
         public void deactivate() {
             // Remove location updates from Location Manager
+            progressBar.setVisibility(View.GONE);
             locationManager.removeUpdates(this);
             mGPS.getDrawable().mutate().setTint(ContextCompat.getColor(MapActivity.this, R.color.gps_not_active));
             mListener = null;
@@ -713,6 +754,7 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
             /* Push location updates to the registered listener..
              * (this ensures that my-location layer will set the blue dot at the new/received location) */
             if (mListener != null) {
+                mCurrLocation = location;
                 mListener.onLocationChanged(location);
                 mGPS.getDrawable().mutate().setTint(ContextCompat.getColor(MapActivity.this, R.color.gps_active));
                 progressBar.setVisibility(View.GONE);
