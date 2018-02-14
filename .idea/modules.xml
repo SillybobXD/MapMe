@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MapMe3.iml" filepath="$PROJECT_DIR$/MapMe3.iml" />
-      <module fileurl="file://C:\Users\Sillybob\AndroidStudioProjects\MapMe3\MikumiA.iml" filepath="C:\Users\Sillybob\AndroidStudioProjects\MapMe3\MikumiA.iml" />
-      <module fileurl="file://C:\Users\Sillybob\AndroidStudioProjects\MapMe3\MikumiApp.iml" filepath="C:\Users\Sillybob\AndroidStudioProjects\MapMe3\MikumiApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FinalMikumi.iml" filepath="$PROJECT_DIR$/FinalMikumi.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\Sillybob\AndroidStudioProjects\MapMe3\mikumibeta.iml" filepath="C:\Users\Sillybob\AndroidStudioProjects\MapMe3\mikumibeta.iml" />
     </modules>
   </component>
 </project>

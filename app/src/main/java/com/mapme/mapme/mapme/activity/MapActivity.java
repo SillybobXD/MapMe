@@ -13,6 +13,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -128,7 +129,7 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
         mSlidingUpPanelLayout = findViewById(R.id.sliding_layout);
 
         //Animation
-        YoYo.with(Techniques.StandUp).playOn(mSearchBar);
+        YoYo.with(Techniques.Landing).duration(2000).playOn(mSearchBar);
         YoYo.with(Techniques.Tada).duration(3500).playOn(mGPS);
 
         //Init searchbar
@@ -151,6 +152,7 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
 
         mMapFragment.getMapAsync(this);
     }
+
 
     @Override
     protected void onStart() {
@@ -571,13 +573,14 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
         });
     }
 
+
+
     public void showPlaceView(final Place place) {
         Log.d(TAG, "showPlaceView");
         final View popupView = getLayoutInflater().inflate(R.layout.selected_place_fragment, null);
 
 
         RelativeLayout mainLayout = findViewById(R.id.mapActivity_cl_parent);
-        RelativeLayout mainLayout_land = findViewById(R.id.mapActivity_cl_parent_land);
 
         // create the popup window
         int width = LinearLayout.LayoutParams.MATCH_PARENT;
@@ -617,6 +620,7 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
         TextView placeWebsite = popupView.findViewById(R.id.tv_website_selected_place_fragment);
         RatingBar ratingBar = popupView.findViewById(R.id.ratingBar);
         final ImageView fav = popupView.findViewById(R.id.btn_add_to_fav_selected_place_fragment);
+        final ImageView share = popupView.findViewById(R.id.btn_share_selected_place_fragment);
 
         favoriteManager.isPlaceFavorite(place.getId(), new FavoriteManager.IIsFavoriteResult() {
             @Override
@@ -630,6 +634,48 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
                 }
             }
         });
+
+        placeNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + place.getPhoneNumber()));
+                if (ActivityCompat.checkSelfPermission(MapActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(MapActivity.this, new String[]{Manifest.permission.CALL_PHONE}, 1);
+                    return;
+                }
+
+                startActivity(intent);
+            }
+        });
+
+        placeWebsite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(place.getWebsite()));
+                startActivity(intent);
+
+
+            }
+        });
+
+        share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                String uri = "via MikUmi >>   " + place.getPlaceName()+ "  " + place.getAddress() + "   " + "http://maps.google.com/maps?saddr=" + place.getLocation().getLatitude() + "," + place.getLocation().getLongitude();
+                String shareSub = "MikUmi: ";
+                intent.putExtra(android.content.Intent.EXTRA_SUBJECT, shareSub);
+                intent.putExtra(android.content.Intent.EXTRA_TEXT, uri);
+                startActivity(Intent.createChooser(intent, "Share via"));
+
+            }
+        });
+
         closeWindow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
