@@ -79,13 +79,14 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
     private static final String TAG = MapActivity.class.getSimpleName();
     private static final int LOCATION_PERMISSION_REQUEST = 1337;
     private static final int GPS_ON_REQUEST = 1338;
+    public static Location mCurrLocation;
     ProgressBar progressBar;
     boolean isSuggestionClicked;
     FavoriteManager favoriteManager;
     //Location
     private LocationManager mLocationManager;
-    private Location mCurrLocation;
     private boolean isLocationOn;
+    private boolean startedReciveingLocationUpdates;
     private FollowMeLocationSource followMeLocationSource;
     private BroadcastReceiver gpsListener;
     private GoogleMap mMap;
@@ -116,6 +117,7 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
         favoriteManager = new FavoriteManager(this);
 
         isLocationOn = false;
+        startedReciveingLocationUpdates = false;
         isSuggestionClicked = false;
         followMeLocationSource = new FollowMeLocationSource();
         markers = new ArrayList<>();
@@ -211,20 +213,8 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
             public void onSearchConfirmed(CharSequence text) {
                 Log.d(TAG, "onSearchConfirmed: ");
                 hideKeyboard(mSearchBar);
-                final GoogleAPIManager.IGetPlacesResponse getNextPage = new GoogleAPIManager.IGetPlacesResponse() {
-                    @Override
-                    public void onResponse(GoogleAPIManager.PlacesPage page) {
-                        Log.d(TAG, "onResponse: " + page.toString());
-                        searchResultsPage.addPage(page);
-                        mSearchResultAdapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onFailure(VolleyError error) {
-
-                    }
-                };
                 final AbsListView.OnScrollListener onScrollListener = new AbsListView.OnScrollListener() {
+                    boolean isRequestSent = false;
 
                     @Override
                     public void onScrollStateChanged(AbsListView absListView, int i) {
@@ -234,11 +224,41 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
                     @Override
                     public void onScroll(AbsListView absListView, final int firstVisibleItem,
                                          final int visibleItemCount, final int totalItemCount) {
-
                         final int lastItem = firstVisibleItem + visibleItemCount;
                         if (lastItem == totalItemCount) {
+                            Log.d(TAG, "onScroll: Last item, isRequestSent: " + isRequestSent + "\nnextPageKey: " + searchResultsPage.getNextPageKey());
                             if (searchResultsPage.isNextPageAvailable())
-                                GoogleAPIManager.getNextPage(searchResultsPage.getNextPageKey(), getNextPage);
+                                if (!isRequestSent) {
+                                    isRequestSent = true;
+                                    GoogleAPIManager.getNextPage(searchResultsPage.getNextPageKey(), new GoogleAPIManager.IGetPlacesResponse() {
+                                        @Override
+                                        public void onResponse(GoogleAPIManager.PlacesPage page) {
+                                            Log.d(TAG, "onResponse: " + page.toString());
+                                            if (startedReciveingLocationUpdates) {
+                                                double radius = GoogleAPIManager.getRadius();
+                                                ArrayList<Place> placesToRemove = new ArrayList<>();
+                                                for (Place place : page.getPlaces()) {
+                                                    if (radius < place.getLocation().distanceTo(mCurrLocation)) {
+                                                        placesToRemove.add(place);
+                                                    }
+                                                }
+                                                if (placesToRemove != null)
+                                                    page.getPlaces().removeAll(placesToRemove);
+                                                searchResultsPage.addPage(page);
+                                                mSearchResultAdapter.notifyDataSetChanged();
+                                                for (Place place : page.getPlaces()) {
+                                                    addMarker(place);
+                                                }
+                                                isRequestSent = false;
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(VolleyError error) {
+
+                                        }
+                                    });
+                                }
                         }
                     }
                 };
@@ -246,7 +266,7 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
                 for (Marker marker : markers) {
                     marker.remove();
                 }
-                if (isLocationOn)
+                if (startedReciveingLocationUpdates)
                     GoogleAPIManager.getNearbyPlaces(text.toString(), new GoogleAPIManager.IGetPlacesResponse() {
                         @Override
                         public void onResponse(GoogleAPIManager.PlacesPage page) {
@@ -414,6 +434,8 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
                             Log.d(TAG, "onFailure: " + error.toString());
                         }
                     });
+                else
+                    isSuggestionClicked = false;
             }
 
             @Override
@@ -801,6 +823,7 @@ public class MapActivity extends LocalizationActivity implements OnMapReadyCallb
              * (this ensures that my-location layer will set the blue dot at the new/received location) */
             if (mListener != null) {
                 mCurrLocation = location;
+                startedReciveingLocationUpdates = true;
                 mListener.onLocationChanged(location);
                 mGPS.getDrawable().mutate().setTint(ContextCompat.getColor(MapActivity.this, R.color.gps_active));
                 progressBar.setVisibility(View.GONE);

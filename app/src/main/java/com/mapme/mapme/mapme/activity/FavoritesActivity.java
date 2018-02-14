@@ -152,6 +152,7 @@ public class FavoritesActivity extends LocalizationActivity {
         TextView placeWebsite = popupView.findViewById(R.id.tv_website_selected_place_fragment);
         RatingBar ratingBar = popupView.findViewById(R.id.ratingBar);
         ImageView fav = popupView.findViewById(R.id.btn_add_to_fav_selected_place_fragment);
+        Button closeBtn = popupView.findViewById(R.id.btn_close_selectedItemFragment);
 
         fav.setVisibility(View.INVISIBLE);
         fav.setClickable(false);
@@ -201,6 +202,13 @@ public class FavoritesActivity extends LocalizationActivity {
         if (place.hasWebsite())
             placeWebsite.setText(place.getWebsite());
         ratingBar.setRating((float) place.getRating());
+
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupWindow.dismiss();
+            }
+        });
 
         // Using location, the PopupWindow will be displayed right under anchorView
         /*popupWindow.showAtLocation(anchorView, Gravity.NO_GRAVITY,

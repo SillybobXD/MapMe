@@ -223,9 +223,11 @@ public class GoogleAPIManager {
             sb.append("keyword=" + formattedInput);
         }
         if (location != null)
-            sb.append("&location=" + location.getLatitude() + "," + location.getLongitude())
-                    .append("&radius=" + radius);
-        sb.append("&key=" + API_KEY);
+            sb.append("&location=" + location.getLatitude() + "," + location.getLongitude());
+                    /*.append("&radius=" + radius);*/
+
+        sb.append("&rankby=distance")
+                .append("&key=" + API_KEY);
 
         JsonObjectRequest request = new JsonObjectRequest(sb.toString(), new JSONObject(), new Response.Listener<JSONObject>() {
             @Override
@@ -396,9 +398,9 @@ public class GoogleAPIManager {
     }
 
     public static class PlacesPage {
+        public String nextPageKey;
         private ArrayList<Place> places;
         private String status;
-        private String nextPageKey;
 
         public PlacesPage(ArrayList<Place> places, String status, @Nullable String nextPageKey) {
             this.places = places;
@@ -407,7 +409,7 @@ public class GoogleAPIManager {
         }
 
         public boolean isNextPageAvailable() {
-            return nextPageKey != null || nextPageKey.isEmpty();
+            return nextPageKey != null && !nextPageKey.isEmpty();
         }
 
         public String getNextPageKey() {
@@ -425,18 +427,21 @@ public class GoogleAPIManager {
         public void addPage(PlacesPage nextPage) {
             places.addAll(nextPage.getPlaces());
 
-            if (nextPage.isNextPageAvailable())
+            if (!nextPage.isNextPageAvailable())
                 nextPageKey = null;
             else
                 nextPageKey = nextPage.getNextPageKey();
+
+            status = nextPage.getStatus();
         }
 
         @Override
         public String toString() {
-            return "PlacesPage{" +
+            return "nextPageKey='" + nextPageKey + '\'' +
+                    "PlacesPage{" +
                     "places=" + places +
                     ", status='" + status + '\'' +
-                    ", nextPageKey='" + nextPageKey + '\'' +
+
                     '}';
         }
     }
